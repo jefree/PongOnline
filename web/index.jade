@@ -1,0 +1,12 @@
+html
+  head
+    title "Pong Online v0.0.1
+    script(src="/socket.io/socket.io.js")
+
+  body
+    script.
+      var socket = io.connect();
+
+      socket.on('hello', function() {
+        alert('connection successfull');
+      });
