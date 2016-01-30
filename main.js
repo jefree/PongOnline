@@ -7,8 +7,8 @@ var APP_PORT = 3000;
 
 server.listen(APP_PORT);
 
-app.use(express.static(__dirname + '/web/public'));
-app.use(express.static(__dirname + '/client'));
+app.use('/common', express.static(__dirname + '/common'));
+app.use('/client', express.static(__dirname + '/client'));
 
 app.set('view engine', 'jade');
 

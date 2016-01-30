@@ -1,9 +1,13 @@
 html
   head
     title "Pong Online v0.0.1
-    script(src="/socket.io/socket.io.js")
-    script(src="/js/game.js")
-    script(src="/js/main.js")
+
+    script(src="/common/Constants.js")
+    script(src="/common/GameLogic.js")
+    script(src="/common/GameInput.js")
+    script(src="/client/GameRenderer.js")
+
+    script(src="/client/main.js")
 
   body
     div#game
