@@ -8,6 +8,12 @@
   GameInput.prototype.update = function() {
   }
 
+  GameInput.prototype.addInput = function(playerId, input) {
+//    var input = Util.clone(input);
+//    input.id = currentId++;
+//    input.playerId = id;
+  }
+
   exports.new = GameInput;
 })(typeof exports !== 'undefined' ? exports : window['GameInput']={});
 

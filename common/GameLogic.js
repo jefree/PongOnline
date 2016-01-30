@@ -4,14 +4,19 @@
     this.width = width;
     this.height = height;
 
+    this.currentId = 1;
     this.entities = [];
   }
 
   GameLogic.prototype.update = function() {
-    console.log("update");
+    this.entities.forEach(function(entity){
+      entity.update();
+    });
   }
 
-  GameLogic.prototype.getEntities = function() {
+  GameLogic.prototype.addEntity = function(entity){
+    entity.id = this.currentId++;
+    this.entities.push(entity);
   }
 
   exports.new = GameLogic;
