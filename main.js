@@ -7,8 +7,8 @@ var APP_PORT = 3000;
 
 server.listen(APP_PORT);
 
-app.use(express.static(__dirname + 'web/public'));
-app.use(express.static(__dirname + 'client'));
+app.use(express.static(__dirname + '/web/public'));
+app.use(express.static(__dirname + '/client'));
 
 app.set('view engine', 'jade');
 
@@ -16,8 +16,9 @@ app.get('/', function (req, res) {
   res.render(__dirname + '/web/index');
 });
 
-io.on('connection', function (socket) {
-  socket.emit('hello', 'welcome:' + socket.id);
-});
+//io.on('connection', function (socket) {
+//  socket.emit('hello', 'welcome:' + socket.id);
+//});
 
 console.log('running on localhost:', APP_PORT);
+

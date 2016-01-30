@@ -2,11 +2,10 @@ html
   head
     title "Pong Online v0.0.1
     script(src="/socket.io/socket.io.js")
+    script(src="/js/game.js")
+    script(src="/js/main.js")
 
   body
-    script.
-      var socket = io.connect();
+    div#game
+      canvas#game-canvas
 
-      socket.on('hello', function() {
-        alert('connection successfull');
-      });
