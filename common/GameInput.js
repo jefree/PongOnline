@@ -14,6 +14,6 @@
 //    input.playerId = id;
   }
 
-  exports.new = GameInput;
+  exports.class = GameInput;
 })(typeof exports !== 'undefined' ? exports : window['GameInput']={});
 

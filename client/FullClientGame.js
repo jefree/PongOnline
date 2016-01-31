@@ -5,15 +5,15 @@
     this.keymap = {};
 
     // create the core object for the game
-    this.gameLogic = new GameLogic.new(width, height);
-    this.gameInput = new GameInput.new(this.gameLogic);
-    this.gameRenderer = new GameRenderer.new(ctx, this.gameLogic);
+    this.gameLogic = new GameLogic.class(width, height);
+    this.gameInput = new GameInput.class(this.gameLogic);
+    this.gameRenderer = new GameRenderer.class(ctx, this.gameLogic);
 
     // register a renderer for each type of entities
     this.gameRenderer.addRenderer("Player", PlayerRenderer);
 
     // create the entity for the current player and this to the game
-    this.player = new Player.new(Constants.player.normal.radius);
+    this.player = new Player.class(Constants.player.normal.radius);
     this.gameLogic.addEntity(this.player);
 
     // add an event listener for the keyboard
@@ -64,5 +64,5 @@
     this.gameInput.addInput(this.player.id, this.keymaps);
   }
 
-  exports.new = FullClientGame;
+  exports.class = FullClientGame;
 })(typeof exports !== "undefined" ? exports : window["FullClientGame"]={});

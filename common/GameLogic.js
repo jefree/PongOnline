@@ -19,5 +19,5 @@
     this.entities.push(entity);
   }
 
-  exports.new = GameLogic;
+  exports.class = GameLogic;
 })(typeof exports !== 'undefined' ? exports : window['GameLogic']={});

@@ -8,6 +8,6 @@ window.onload = function() {
   canvas.width = width;
   canvas.height = height;
 
-  var game = new FullClientGame.new(ctx, width, height);
+  var game = new FullClientGame.class(ctx, width, height);
 
 }

@@ -14,8 +14,8 @@
   }
 
   GameRenderer.prototype.addRenderer = function(type, rendererClass) {
-    this.renderers[type] = new rendererClass.new(this.ctx);
+    this.renderers[type] = new rendererClass.class(this.ctx);
   }
 
-  exports.new = GameRenderer;
+  exports.class = GameRenderer;
 })(typeof exports !== 'undefined' ? exports : window['GameRenderer']={});

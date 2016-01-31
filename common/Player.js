@@ -14,6 +14,6 @@
     this.move();
   }
 
-  exports.new = Player;
+  exports.class = Player;
 
 })(typeof exports !== "undefined" ? exports : window['Player']={});

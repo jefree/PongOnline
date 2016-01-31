@@ -8,6 +8,6 @@
     console.log("render player", player.id);
   }
 
-  exports.new = PlayerRenderer;
+  exports.class = PlayerRenderer;
 
 })(typeof exports !== "undefined" ? exports : window["PlayerRenderer"]={});
