@@ -5,7 +5,8 @@
   }
 
   PlayerRenderer.prototype.render = function(player) {
-    console.log("render player", player.id);
+    this.ctx.fillStyle = "#DDD";
+    this.ctx.fillRect(player.x, player.y, player.radius, player.radius);
   }
 
   exports.class = PlayerRenderer;

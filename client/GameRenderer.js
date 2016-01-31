@@ -7,6 +7,9 @@
   }
 
   GameRenderer.prototype.render = function() {
+    this.ctx.fillStyle = "#000";
+    this.ctx.fillRect(0,0, this.game.width, this.game.height);
+
     this.game.entities.forEach(function(entity) {
       // find the correct renderer for this type of entity and use it
       this.renderers[entity.type].render(entity);

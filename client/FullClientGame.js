@@ -35,7 +35,7 @@
           this.keymap.backward = true;
           break;
       }
-    });
+    }.bind(this));
 
     document.addEventListener('keyup', function(e){
       switch( e.keyCode ) {
@@ -46,7 +46,7 @@
           this.keymap.backward = false;
           break;
       }
-    });
+    }.bind(this));
   }
 
   FullClientGame.prototype.update = function() {
@@ -61,7 +61,8 @@
   }
 
   FullClientGame.prototype.processInput = function() {
-    this.gameInput.addInput(this.player.id, this.keymaps);
+
+    this.gameInput.addInput(this.player.id, this.keymap);
   }
 
   exports.class = FullClientGame;
