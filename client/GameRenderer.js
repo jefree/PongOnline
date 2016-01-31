@@ -1,12 +1,20 @@
 (function(exports) {
 
-  var GameRenderer = function(ctx){
+  var GameRenderer = function(ctx, game){
     this.ctx = ctx;
-    this.game = null; //acts as setGame method
+    this.game = game;
+    this.renderers = {};
   }
 
   GameRenderer.prototype.render = function() {
-    console.log("render");
+    this.game.entities.forEach(function(entity) {
+      // find the correct renderer for this type of entity and use it
+      this.renderers[entity.type].render(entity);
+    }.bind(this));
+  }
+
+  GameRenderer.prototype.addRenderer = function(type, rendererClass) {
+    this.renderers[type] = new rendererClass.new(this.ctx);
   }
 
   exports.new = GameRenderer;

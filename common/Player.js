@@ -1,5 +1,6 @@
 (function(exports){
   var Player = function(game, radius){
+    this.type = "Player";
     this.radius = radius;
   }
 

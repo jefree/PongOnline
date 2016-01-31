@@ -1,11 +1,16 @@
 (function(exports) {
 
   var FullClientGame = function(ctx, width, height) {
+    // map of pseudo keys for the player inputs
+    this.keymap = {};
+
+    // create the core object for the game
     this.gameLogic = new GameLogic.new(width, height);
     this.gameInput = new GameInput.new(this.gameLogic);
     this.gameRenderer = new GameRenderer.new(ctx, this.gameLogic);
-    console.log(this.gameRenderer);
-    this.keymap = {};
+
+    // register a renderer for each type of entities
+    this.gameRenderer.addRenderer("Player", PlayerRenderer);
 
     // create the entity for the current player and this to the game
     this.player = new Player.new(Constants.player.normal.radius);
