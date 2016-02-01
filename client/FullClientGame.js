@@ -16,6 +16,11 @@
     this.player = new Player.class(Constants.player.normal.radius);
     this.gameLogic.addEntity(this.player);
 
+    this.opponent = new Player.class(Constants.player.normal.radius);
+    this.opponent.x = 200;
+    this.opponent.y = 200;
+    this.gameLogic.addEntity(this.opponent);
+
     // add an event listener for the keyboard
     this.setKeyListener();
 
