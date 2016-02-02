@@ -6,11 +6,11 @@
 
     // create the core object for the game
     this.gameLogic = new GameLogic.class(width, height);
-    this.gameInput = new GameInput.class(this.gameLogic);
     this.gameRenderer = new GameRenderer.class(ctx, this.gameLogic);
 
     // register a renderer for each type of entities
     this.gameRenderer.addRenderer("Player", PlayerRenderer);
+    this.keyboardController = new KeyboardController.class(this.gameLogic);
 
     // create the entity for the current player and this to the game
     this.player = new Player.class(Constants.player.normal.radius);
@@ -21,53 +21,24 @@
     this.opponent.y = 200;
     this.gameLogic.addEntity(this.opponent);
 
-    // add an event listener for the keyboard
-    this.setKeyListener();
+    this.keyboardController.addEntityInput(this.player.id, Constants.key.RIGHT, "forward");
+    this.keyboardController.addEntityInput(this.player.id, Constants.key.LEFT, "backward");
+    this.keyboardController.addEntityInput(this.opponent.id, Constants.key.RIGHT, "forward");
+    this.keyboardController.addEntityInput(this.opponent.id, Constants.key.LEFT, "backward");
 
     // set the loops for the game logic and the renderer
     setInterval(this.update.bind(this), Constants.game.updateLoopTime);
     requestAnimationFrame(this.render.bind(this));
   }
 
-  FullClientGame.prototype.setKeyListener = function(){
-
-    document.addEventListener('keydown', function(e){
-      switch( e.keyCode ) {
-        case Constants.key.RIGHT:
-          this.keymap.forward = true;
-          break;
-        case Constants.key.LEFT:
-          this.keymap.backward = true;
-          break;
-      }
-    }.bind(this));
-
-    document.addEventListener('keyup', function(e){
-      switch( e.keyCode ) {
-        case Constants.key.RIGHT:
-          this.keymap.forward = false;
-          break;
-        case Constants.key.LEFT:
-          this.keymap.backward = false;
-          break;
-      }
-    }.bind(this));
-  }
-
   FullClientGame.prototype.update = function() {
-    this.processInput();
-    this.gameInput.update();
+    this.keyboardController.update();
     this.gameLogic.update();
   }
 
   FullClientGame.prototype.render = function() {
     this.gameRenderer.render();
     requestAnimationFrame(this.render.bind(this));
-  }
-
-  FullClientGame.prototype.processInput = function() {
-
-    this.gameInput.addInput(this.player.id, this.keymap);
   }
 
   exports.class = FullClientGame;

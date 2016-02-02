@@ -1,6 +1,6 @@
 function require(module) {
   module = module.split('/').pop();
-  if ( !(module in window) ) {
+  if ( !(window.hasOwnProperty(module)) ) {
     throw "module named " + module + "doesnt exists. Did you forget import it ?";
   }
 

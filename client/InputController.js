@@ -1,29 +1,37 @@
 (function(exports) {
-  var InputController =  function(gameInput) {
-    this.gameInput = gameInput;
+  var InputController =  function(game) {
+    this.gameInput = new GameInput.class(game);
 
     // store the inputs for each registered player
-    this.playerInputMap = {};
+    this.entityInputMap = {};
 
     //override by subclasses
     this.createInputListener();
   }
 
-  InputController.prototype.addPlayerKey = function(player.id, inputCode), actionName {
-    var playerInputs = this.playerInputMap[player.id] || {};
-    playerInputs[inputCode] = { 
+  InputController.prototype.addEntityInput = function(entityId, inputCode, actionName) {
+    var entityInputs = null;
+
+    if ( this.entityInputMap.hasOwnProperty(entityId) ) {
+      entityInputs = this.entityInputMap[entityId];
+    }
+    else {
+      entityInputs = this.entityInputMap[entityId] = {};
+    }
+
+    entityInputs[inputCode] = { 
       action: actionName,
       status: false
     };
   }
 
   InputController.prototype.update = function() {
-    for ( playerId in this.playerInputMap ) {
+    for ( entityId in this.entityInputMap ) {
       var inputSet = {};
 
       // register each of the pressed inputs for this player
-      for ( inputCode in this.playerInputMap[playerId] ) {
-        var input = this.playerInputMap[playerId][inputCode];
+      for ( inputCode in this.entityInputMap[entityId] ) {
+        var input = this.entityInputMap[entityId][inputCode];
         
         // crate the input only if the input is activated
         if ( input.active ) {
@@ -31,16 +39,18 @@
         }
       }
 
-      if ( inputSet.keys(obj).length > 0) {
-        this.gameInput.addInput(playerId, input);
+      if ( Object.keys(inputSet).length > 0) {
+        this.gameInput.addInput(entityId, inputSet);
       }
     }
+
+    this.gameInput.update();
   }
 
   InputController.prototype.setInputStatus = function(inputCode, status) {
-    for ( playerId in this.playerInputMap ) {
-      if (inputCode in this.playerInputMap[playerId]) {
-        this.playerInputMap[playerId][inputCode].active = status;
+    for ( entityId in this.entityInputMap ) {
+      if ( this.entityInputMap[entityId].hasOwnProperty(inputCode) ) {
+        this.entityInputMap[entityId][inputCode].active = status;
       }
     }
   }
