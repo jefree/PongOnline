@@ -10,12 +10,22 @@
   exports.key = {
     RIGHT: 39,
     LEFT: 37,
+    UP: 38,
+    DOWN: 40,
+    W: 87,
+    S: 83,
+    A: 65,
+    D: 68,
   };
 
   exports.player = {
     normal: {
-      radius: 20,
-      speed: 100,
+      radius: 50,
+      speed: 250,
+    },
+    type: {
+      horizontal: 0,
+      vertcal: 1
     }
   };
 })(typeof exports !== "undefined" ? exports : window['Constants']={});

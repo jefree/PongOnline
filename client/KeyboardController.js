@@ -15,21 +15,11 @@
   }
 
   KeyboardController.prototype.onKeyDown = function(evt) {
-    switch (evt.keyCode) {
-      case Constants.key.RIGHT:
-      case Constants.key.LEFT:
-        this.setInputStatus(evt.keyCode, true);
-        break;
-    }
+    this.setInputStatus(evt.keyCode, true);
   }
 
   KeyboardController.prototype.onKeyUp = function(evt) {
-    switch (evt.keyCode) {
-      case Constants.key.RIGHT:
-      case Constants.key.LEFT:
-        this.setInputStatus(evt.keyCode, false);
-        break;
-    }
+    this.setInputStatus(evt.keyCode, false);
   }
 
   exports.class = KeyboardController;

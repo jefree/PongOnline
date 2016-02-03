@@ -7,10 +7,17 @@
 
     //override by subclasses
     this.createInputListener();
+
+    // already registered input codes
+    this.availableInputCodes = [];
   }
 
   InputController.prototype.addEntityInput = function(entityId, inputCode, actionName) {
     var entityInputs = null;
+
+    if ( this.availableInputCodes.indexOf(inputCode) == -1 ) {
+      this.availableInputCodes.push(inputCode);
+    }
 
     if ( this.entityInputMap.hasOwnProperty(entityId) ) {
       entityInputs = this.entityInputMap[entityId];
@@ -48,6 +55,10 @@
   }
 
   InputController.prototype.setInputStatus = function(inputCode, status) {
+    if ( this.availableInputCodes.indexOf(inputCode) == -1 ) {
+      return
+    }
+
     for ( entityId in this.entityInputMap ) {
       if ( this.entityInputMap[entityId].hasOwnProperty(inputCode) ) {
         this.entityInputMap[entityId][inputCode].active = status;

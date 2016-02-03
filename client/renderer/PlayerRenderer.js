@@ -6,7 +6,9 @@
 
   PlayerRenderer.prototype.render = function(player) {
     this.ctx.fillStyle = "#DDD";
-    this.ctx.fillRect(player.x, player.y, player.radius, player.radius);
+    this.ctx.beginPath();
+    this.ctx.arc(player.x, player.y, player.radius, 0, 2*Math.PI, false);
+    this.ctx.fill();
   }
 
   exports.class = PlayerRenderer;
