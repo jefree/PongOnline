@@ -28,4 +28,12 @@
       vertcal: 1
     }
   };
+
+  exports.ball = {
+    normal: {
+      radius: 20,
+      speed: 200,
+    }
+  };
+
 })(typeof exports !== "undefined" ? exports : window['Constants']={});

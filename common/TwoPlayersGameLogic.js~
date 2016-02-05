@@ -1,0 +1,74 @@
+(function(exports) {
+  var GameLogic = require("common/GameLogic").class;
+  var Constants = require("common/Constants");
+  var Ball = require("common/Ball").class;
+  var Player = require("common/Player").class;
+
+  var TwoPlayersGameLogic  = function(width, height) {
+    GameLogic.call(this, width, height);
+
+    // create the entity for the current player and this to the game
+    this.player = new Player(Constants.player.normal.radius, Constants.player.type.vertical);
+    this.addEntity(this.player);
+
+    this.player.x = - this.player.radius*1/2;
+    this.player.y = this.height / 2;
+
+     // add a second player
+    this.opponent = new Player(Constants.player.normal.radius, Constants.player.type.vertical);
+    this.addEntity(this.opponent);
+
+    this.opponent.x = this.width + this.opponent.radius*1/2;
+    this.opponent.y = this.height / 2;
+
+    this.ball = new Ball(Constants.ball.normal.radius);
+    this.addEntity(this.ball);
+
+    this.ball.x = this.width / 2;
+    this.ball.y = this.height / 2;
+
+    this.ball.vx = Constants.ball.normal.speed;
+    this.ball.vy = Constants.ball.normal.speed;
+  }
+
+  TwoPlayersGameLogic.prototype = Object.create(GameLogic.prototype);
+  TwoPlayersGameLogic.prototype.constructor = TwoPlayersGameLogic;
+
+  TwoPlayersGameLogic.prototype.update = function() {
+    this.delta = Constants.game.updateLoopTime / 1000;
+
+    this.player.update();
+    this.opponent.update();
+    this.ball.update();
+
+    this.checkBallBoundsCollision();
+  }
+
+  TwoPlayersGameLogic.prototype.checkBallBoundsCollision = function(){
+    if ( this.ball.x - this.ball.radius < 0) {
+      this.ball.x = this.radius;
+      collision = true;
+    }
+    if ( this.ball.x + this.ball.radius > this.width) {
+      this.ball.x = this.width - this.radius;
+      collision = true;
+    }
+    if ( this.ball.y - this.ball.radius < 0) {
+      this.ball.y = this.radius;
+      collision = true;
+    }
+    if ( this.ball.y + this.ball.radius > this.height) {
+      this.ball.y = this.height - this.radius;
+      collision = true;
+    }
+
+    if ( collision ) {
+      this.ball.vx *= -1;
+      this.ball.vy *= -1;
+    }
+  }
+
+  exports.class = TwoPlayersGameLogic;
+ 
+})(typeof exports != "undefined" ? exports : window["TwoPlayersGameLogic"]={});
+
