@@ -82,16 +82,10 @@
       ball.x = player.x + normal.x * radiusSum;
       ball.y = player.y + normal.y * radiusSum;
 
-      var perp = {
-        x: normal.x,
-        y: -normal.y
-      };
+      var dot = ball.vx*normal.x + ball.vy*normal.y;
 
-      var dot = ball.vx*perp.x + ball.vy*perp.y;
-      var result = {};
-
-      ball.vx = ball.vx - 2 * dot * perp.x;
-      ball.vy = ball.vy - 2 * dot * perp.y;
+      ball.vx = ball.vx - 2 * dot * normal.x;
+      ball.vy = ball.vy - 2 * dot * normal.y;
     }
   }
 
