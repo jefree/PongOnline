@@ -3,6 +3,7 @@
   var GameInput = function(game) {
     this.game = game;
     this.inputs = [];
+    this.listeners = {};
     this.currentId = 1;
   }
 
@@ -23,12 +24,21 @@
   }
 
   GameInput.prototype.addInput = function(id, input) {
-
     var input = Util.clone(input);
+
     input.id = this.currentId++;
     input.entityId = id;
 
     this.inputs.push(input);
+
+    // execute all registered listener functions
+    for ( name in this.listeners) {
+      this.listeners[name].call(null, input);
+    }
+  }
+
+  GameInput.prototype.addListener = function(name, callback) {
+    this.listeners[name] = callback;
   }
 
   exports.class = GameInput;

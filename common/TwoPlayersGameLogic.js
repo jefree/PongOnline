@@ -1,8 +1,8 @@
 (function(exports) {
-  var GameLogic = require("common/GameLogic").class;
-  var Constants = require("common/Constants");
-  var Ball = require("common/Ball").class;
-  var Player = require("common/Player").class;
+  var GameLogic = require("./GameLogic").class;
+  var Constants = require("./Constants");
+  var Ball = require("./Ball").class;
+  var Player = require("./Player").class;
 
   var TwoPlayersGameLogic  = function(width, height) {
     GameLogic.call(this, width, height);

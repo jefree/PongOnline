@@ -4,6 +4,7 @@
     // create the core object for the game
     this.gameLogic = new TwoPlayersGameLogic.class(width, height);
     this.gameRenderer = new GameRenderer.class(ctx, this.gameLogic);
+    this.network = new NetworkClient.class(new io());
 
     // register a renderer for each type of entities
     this.gameRenderer.addRenderer("Player", PlayerRenderer);
@@ -16,6 +17,10 @@
 
     this.keyboardController.addEntityInput(this.gameLogic.opponent.id, Constants.key.DOWN, "forward");
     this.keyboardController.addEntityInput(this.gameLogic.opponent.id, Constants.key.UP, "backward");
+
+    this.keyboardController.gameInput.addListener('game', this.onInput.bind(this));
+
+    this.network.onConnected(this.onConnected.bind(this));
 
     // set the loops for the game logic and the renderer
     setInterval(this.update.bind(this), Constants.game.updateLoopTime);
@@ -30,6 +35,14 @@
   FullClientGame.prototype.render = function() {
     this.gameRenderer.render();
     requestAnimationFrame(this.render.bind(this));
+  }
+
+  FullClientGame.prototype.onConnected = function(data) {
+
+  }
+
+  FullClientGame.prototype.onInput = function(input) {
+    this.network.emit('input', input);
   }
 
   exports.class = FullClientGame;

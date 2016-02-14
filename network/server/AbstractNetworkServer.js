@@ -12,6 +12,7 @@ function AbstractNetworkServer(io) {
 }
 
 AbstractNetworkServer.prototype.onNewConnection = function(socket) {
+
   var game = this.getGameForNewPlayer();
 
   if (game == null) {
@@ -29,6 +30,7 @@ AbstractNetworkServer.prototype.getGameForNewPlayer = function(socket) {
   while (theGame == null && i < this.games.length) {
     var _game = this.games[i];
     theGame = _game.isAvailable() ? _game : null;
+    i++;
   }
 
   return theGame;

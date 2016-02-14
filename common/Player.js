@@ -1,4 +1,6 @@
 (function(exports){
+  var Constants = require('./Constants');
+
   var Player = function(radius, playerType){
     //this.game will set when entity is added to the game
 

@@ -19,11 +19,14 @@ AbstractServerGame.prototype.addNewPlayer = function(socket) {
     var event = this.events[name];
 
     player.on(name, function(data) {
+
       event.call(null, player, data);
     });
   }
 
-  this.onNewPlayer(player);
+  var newPlayerInfo = this.onNewPlayer(player);
+
+  player.emit('connected', newPlayerInfo);
 }
 
 // Register a new event for the players
