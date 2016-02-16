@@ -15,15 +15,23 @@ NetworkTwoPlayersGame.prototype = Object.create(AbstractNetworkGame.prototype);
 NetworkTwoPlayersGame.prototype.constructor = NetworkTwoPlayersGame;
 
 NetworkTwoPlayersGame.prototype.isAvailable = function() {
-  return true;
+  return this.players.length < 2;
 }
 
 NetworkTwoPlayersGame.prototype.onNewPlayer = function(player) {
-  return { msg: "welcome" };
+  if (this.players.length == 2) {
+    this.beginGame();
+  }
+
+  return { player: this.players.length };
+}
+
+NetworkTwoPlayersGame.prototype.beginGame = function() {
+  //set intervals for the game logic and input as well as for game update.
 }
 
 NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {
-
+  console.log(input);
 }
 
 exports.class = NetworkTwoPlayersGame;

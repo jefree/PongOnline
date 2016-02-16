@@ -2,7 +2,7 @@
 
   var FullClientGame = function(ctx, width, height) {
     // create the core object for the game
-    this.gameLogic = new TwoPlayersGameLogic.class(width, height);
+    this.gameLogic = new ClientTwoPlayersGameLogic.class(width, height);
     this.gameRenderer = new GameRenderer.class(ctx, this.gameLogic);
     this.network = new NetworkClient.class(new io());
 
@@ -23,7 +23,7 @@
     this.network.onConnected(this.onConnected.bind(this));
 
     // set the loops for the game logic and the renderer
-    setInterval(this.update.bind(this), Constants.game.updateLoopTime);
+//    setInterval(this.update.bind(this), Constants.game.updateLoopTime);
     requestAnimationFrame(this.render.bind(this));
   }
 

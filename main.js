@@ -3,7 +3,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var networkServer = require('./server/NetworkServer');
-var APP_PORT = 3000;
+var APP_PORT = process.argv[2] || 3000;
 
 server.listen(APP_PORT);
 
