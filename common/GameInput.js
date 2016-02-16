@@ -5,9 +5,15 @@
     this.inputs = [];
     this.listeners = {};
     this.currentId = 1;
+    this.applyInputs = true;
   }
 
   GameInput.prototype.update = function() {
+    if ( !this.applyInputs ) {
+      this.inputs.length = 0;
+      return;
+    }
+
     for (var i=this.game.entities.length-1; i>=0; i--) {
       var entity = this.game.entities[i];
 
@@ -15,7 +21,6 @@
         var input = this.inputs[j];
 
         if (input.entityId == entity.id) {
-          //apply and remove it
           entity.processInput(input);
           this.inputs.splice(j, 1);
         }

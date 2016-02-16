@@ -18,12 +18,13 @@
     this.keyboardController.addEntityInput(this.gameLogic.opponent.id, Constants.key.DOWN, "forward");
     this.keyboardController.addEntityInput(this.gameLogic.opponent.id, Constants.key.UP, "backward");
 
+    this.keyboardController.gameInput.applyInputs = false;
     this.keyboardController.gameInput.addListener('game', this.onInput.bind(this));
 
     this.network.onConnected(this.onConnected.bind(this));
 
     // set the loops for the game logic and the renderer
-//    setInterval(this.update.bind(this), Constants.game.updateLoopTime);
+    setInterval(this.update.bind(this), Constants.game.updateLoopTime);
     requestAnimationFrame(this.render.bind(this));
   }
 
