@@ -1,5 +1,6 @@
 (function(exports) {
-  
+  var Util = require('./Util');
+
   var GameInput = function(game) {
     this.game = game;
     this.inputs = [];

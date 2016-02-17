@@ -10,30 +10,24 @@ var NetworkTwoPlayersGame = function(network) {
   this.gameInput = new GameInput(this.gameLogic);
 
   this.addNewPlayerEvent('input', this.onPlayerInput.bind(this));
+
+  //set intervals for the game logic and input as well as for game update.
+  this.gameUpdateLoopId = setInterval(this.gameUpdate.bind(this), 16);
+  this.gameBroadcastUpdateLoopId = setInterval(this.broadcastUpdate.bind(this), 45);
 }
 NetworkTwoPlayersGame.prototype = Object.create(AbstractNetworkGame.prototype);
 NetworkTwoPlayersGame.prototype.constructor = NetworkTwoPlayersGame;
 
 NetworkTwoPlayersGame.prototype.isAvailable = function() {
-  return this.players.length < 2;
+  return Object.keys(this.players).length < 2;
 }
 
 NetworkTwoPlayersGame.prototype.onNewPlayer = function(player) {
-  if (this.players.length == 2) {
-    this.beginGame();
-  }
-
-  return { me: this.players.length < 1 ? this.gameLogic.player.id : this.gameLogic.opponent.id };
-}
-
-NetworkTwoPlayersGame.prototype.beginGame = function() {
-  //set intervals for the game logic and input as well as for game update.
-  this.gameUpdateLoopId = setInterval(this.gameUpdate.bind(this), 16);
-  this.gameBroadcastUpdateLoopId = setInterval(this.broadcastUpdate.bind(this), 45);
+  return { me: Object.keys(this.players).length == 1 ? this.gameLogic.player.id : this.gameLogic.opponent.id };
 }
 
 NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {
-  console.log(input);
+ this.gameInput.addInput(input.entityId, input);
 }
 
 NetworkTwoPlayersGame.prototype.gameUpdate = function() {
@@ -47,13 +41,15 @@ NetworkTwoPlayersGame.prototype.broadcastUpdate = function() {
 
   gameStatus.entities = [];
 
-  this.gameLogic.entities.forEach(function(){
+  this.gameLogic.entities.forEach(function(entity){
     var entityStatus = entity.getStatus();
+    entityStatus.id = entity.id;
     gameStatus.entities.push(entityStatus);
   });
 
-  this.players.forEach(function(player){
-    player.emit('update', gameStatus);
+  var self = this;
+  Object.keys(this.players).forEach(function(key){
+    self.players[key].emit('update', gameStatus);
   });
 }
 
