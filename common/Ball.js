@@ -15,6 +15,22 @@
     this.y += this.vy * this.game.delta;
   }
 
+  Ball.prototype.getStatus = function() {
+    return {
+      x: this.x,
+      y: this.y,
+      vx: this.vx,
+      vy: this.vy
+    }
+  }
+
+  Ball.prototype.setStatus = function(status) {
+    this.x = status.x;
+    this.y = status.y;
+    this.vx = status.vx;
+    this.vy = status.vy;
+  }
+
   exports.class = Ball;
 
 })(typeof exports != "undefined" ? exports : window["Ball"]={});

@@ -17,5 +17,17 @@
     this.entities.push(entity);
   }
 
+  GameLogic.prototype.getEntityById = function(id) {
+    var entity = null;
+    var i = 0;
+
+    do {
+      entity = this.entities[i];
+      i++;
+    } while (entity.id != id && i < this.entities.length);
+
+    return entity;
+  }
+
   exports.class = GameLogic;
 })(typeof exports !== 'undefined' ? exports : window['GameLogic']={});

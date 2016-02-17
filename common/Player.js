@@ -23,6 +23,22 @@
     this.vx = this.vy = 0;
   }
 
+  Player.prototype.getStatus = function() {
+    return {
+      x: this.x,
+      y: this.y,
+      vx: this.vx,
+      vy: this.vy
+    }
+  }
+
+  Player.prototype.setStatus = function(status) {
+    this.x = status.x;
+    this.y = status.y;
+    this.vx = status.vx;
+    this.vy = status.vy;
+  }
+
   Player.prototype.processInput = function(input) {
     if (this.playerType == Constants.player.type.vertical ) {
       this.processInputAsVertical(input);

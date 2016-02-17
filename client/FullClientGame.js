@@ -12,20 +12,14 @@
 
     this.keyboardController = new KeyboardController.class(this.gameLogic);
 
-    this.keyboardController.addEntityInput(this.gameLogic.player.id, Constants.key.W, "backward");
-    this.keyboardController.addEntityInput(this.gameLogic.player.id, Constants.key.S, "forward");
-
-    this.keyboardController.addEntityInput(this.gameLogic.opponent.id, Constants.key.DOWN, "forward");
-    this.keyboardController.addEntityInput(this.gameLogic.opponent.id, Constants.key.UP, "backward");
+//    this.keyboardController.addEntityInput(this.gameLogic.player.id, Constants.key.W, "backward");
+//    this.keyboardController.addEntityInput(this.gameLogic.player.id, Constants.key.S, "forward");
 
     this.keyboardController.gameInput.applyInputs = false;
     this.keyboardController.gameInput.addListener('game', this.onInput.bind(this));
 
     this.network.onConnected(this.onConnected.bind(this));
-
-    // set the loops for the game logic and the renderer
-    setInterval(this.update.bind(this), Constants.game.updateLoopTime);
-    requestAnimationFrame(this.render.bind(this));
+    this.network.onUpdate(this.onUpdate.bind(this));
   }
 
   FullClientGame.prototype.update = function() {
@@ -39,12 +33,25 @@
   }
 
   FullClientGame.prototype.onConnected = function(data) {
+    this.me = this.gameLogic.getEntityById(data.me);
 
+    this.keyboardController.addEntityInput(this.gameLogic.me.id, Constants.key.DOWN, "forward");
+    this.keyboardController.addEntityInput(this.gameLogic.me.id, Constants.key.UP, "backward");
+
+    // set the loops for the game logic and the renderer
+    setInterval(this.update.bind(this), Constants.game.updateLoopTime);
+    requestAnimationFrame(this.render.bind(this));
+  }
+
+  FullClientGame.prototype.onUpdate = function(update) {
+    console.log("new update");
+    console.log(update.entities[0]);
   }
 
   FullClientGame.prototype.onInput = function(input) {
     this.network.emit('input', input);
   }
+
 
   exports.class = FullClientGame;
 })(typeof exports !== "undefined" ? exports : window["FullClientGame"]={});

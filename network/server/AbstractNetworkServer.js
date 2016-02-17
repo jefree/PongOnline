@@ -12,7 +12,6 @@ function AbstractNetworkServer(io) {
 }
 
 AbstractNetworkServer.prototype.onNewConnection = function(socket) {
-
   var game = this.getGameForNewPlayer();
 
   if (game == null) {

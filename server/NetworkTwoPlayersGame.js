@@ -23,15 +23,38 @@ NetworkTwoPlayersGame.prototype.onNewPlayer = function(player) {
     this.beginGame();
   }
 
-  return { player: this.players.length };
+  return { me: this.players.length < 1 ? this.gameLogic.player.id : this.gameLogic.opponent.id };
 }
 
 NetworkTwoPlayersGame.prototype.beginGame = function() {
   //set intervals for the game logic and input as well as for game update.
+  this.gameUpdateLoopId = setInterval(this.gameUpdate.bind(this), 16);
+  this.gameBroadcastUpdateLoopId = setInterval(this.broadcastUpdate.bind(this), 45);
 }
 
 NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {
   console.log(input);
+}
+
+NetworkTwoPlayersGame.prototype.gameUpdate = function() {
+  this.gameLogic.update();
+  this.gameInput.update();
+}
+
+// maybe this should be in a better place
+NetworkTwoPlayersGame.prototype.broadcastUpdate = function() {
+  var gameStatus = {};
+
+  gameStatus.entities = [];
+
+  this.gameLogic.entities.forEach(function(){
+    var entityStatus = entity.getStatus();
+    gameStatus.entities.push(entityStatus);
+  });
+
+  this.players.forEach(function(player){
+    player.emit('update', gameStatus);
+  });
 }
 
 exports.class = NetworkTwoPlayersGame;

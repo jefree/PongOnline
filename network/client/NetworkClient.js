@@ -30,6 +30,10 @@
     this.on('connected', callback);
   }
 
+  AbstractClientNetwork.prototype.onUpdate = function(callback) {
+    this.on('update', callback);
+  }
+
   exports.class = AbstractClientNetwork;
 
 })(typeof exports != "undefined" ? exports : window["NetworkClient"]={});
