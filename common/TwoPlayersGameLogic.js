@@ -35,7 +35,7 @@
   TwoPlayersGameLogic.prototype.constructor = TwoPlayersGameLogic;
 
   TwoPlayersGameLogic.prototype.update = function() {
-    this.delta = Constants.game.updateLoopTime / 1000;
+    this.delta = Constants.game.gameLoopTime / 1000;
 
     this.player.update();
     this.opponent.update();

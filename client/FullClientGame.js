@@ -40,7 +40,7 @@
     this.keyboardController.addEntityInput(this.me.id, Constants.key.UP, "backward");
 
     // set the loops for the game logic and the renderer
-    setInterval(this.update.bind(this), Constants.game.updateLoopTime);
+    setInterval(this.update.bind(this), Constants.game.gameLoopTime);
     requestAnimationFrame(this.render.bind(this));
   }
 

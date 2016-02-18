@@ -3,7 +3,8 @@
     width: 600,
     height: 600,
 
-    updateLoopTime: 22,
+    gameLoopTime: 22,
+    updateLoopTime: 45,
 
   };
 

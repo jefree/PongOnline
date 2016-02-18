@@ -6,12 +6,13 @@ var NetworkPlayer = require('./NetworkPlayer').class;
 // with the specific game implmentation.
 function AbstractServerGame (network) {
   this.network = network;
-  this.players = {};
+  this.players = [];
   this.events = {}
 }
 
 AbstractServerGame.prototype.addNewPlayer = function(socket) {
-  var player = this.players[socket.id] = new NetworkPlayer(this.network, socket);
+  var player = new NetworkPlayer(this.network, socket);
+  this.players.push(player);
 
   // register all the events for the new player
   // all the events receive the player and the data that has arrived
@@ -29,6 +30,12 @@ AbstractServerGame.prototype.addNewPlayer = function(socket) {
   player.emit('connected', newPlayerInfo);
 }
 
+AbstractServerGame.prototype.beginGame = function(gameLoopTime, updateLoopTime) {
+  //set intervals for the game logic and input as well as for game update.
+  this.gameUpdateLoopId = setInterval(this.gameLoop.bind(this), gameLoopTime);
+  this.gameBroadcastUpdateLoopId = setInterval(this.updateLoop.bind(this), updateLoopTime);
+}
+  
 // Register a new event for the players
 // If callback must be called within a context make a bind over the original
 // function
@@ -42,6 +49,26 @@ AbstractServerGame.prototype.isAvailable = function() {
 
 AbstractServerGame.prototype.onNewPlayer = function(player) {
   throw "Not Implemented Exception";
+}
+
+AbstractServerGame.prototype.gameLoop = function() {
+  throw "Not Implemented Exception";
+}
+
+AbstractServerGame.prototype.updateLoop = function() {
+  var gameStatus = {};
+
+  gameStatus.entities = [];
+
+  this.gameLogic.entities.forEach(function(entity){
+    var entityStatus = entity.getStatus();
+    entityStatus.id = entity.id;
+    gameStatus.entities.push(entityStatus);
+  });
+
+  for ( index in this.players) {
+    this.players[index].emit('update', gameStatus);
+  }
 }
 
 exports.class = AbstractServerGame;
