@@ -1,4 +1,5 @@
 (function(exports) {
+  var Constants = require('../common/Constants');
 
   var FullClientGame = function(ctx, width, height) {
     // create the core object for the game
@@ -18,6 +19,7 @@
     this.keyboardController.gameInput.applyInputs = false;
     this.keyboardController.gameInput.addListener('game', this.onInput.bind(this));
 
+    this.network.latency = Constants.game.latency;
     this.network.onConnected(this.onConnected.bind(this));
     this.network.onUpdate(this.onUpdate.bind(this));
   }
