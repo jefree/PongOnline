@@ -56,19 +56,7 @@ AbstractServerGame.prototype.gameLoop = function() {
 }
 
 AbstractServerGame.prototype.updateLoop = function() {
-  var gameStatus = {};
-
-  gameStatus.entities = [];
-
-  this.gameLogic.entities.forEach(function(entity){
-    var entityStatus = entity.getStatus();
-    entityStatus.id = entity.id;
-    gameStatus.entities.push(entityStatus);
-  });
-
-  for ( index in this.players) {
-    this.players[index].emit('update', gameStatus);
-  }
+  throw "Not Implemented Exception";
 }
 
 exports.class = AbstractServerGame;
