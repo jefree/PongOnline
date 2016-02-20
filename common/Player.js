@@ -40,6 +40,7 @@
   }
 
   Player.prototype.processInput = function(input) {
+
     if (this.playerType == Constants.player.type.vertical ) {
       this.processInputAsVertical(input);
     }
@@ -50,19 +51,19 @@
 
   Player.prototype.processInputAsHorizontal = function(input) {
     if (input.forward) {
-      this.vx = Constants.player.normal.speed;
+      this.vx += Constants.player.normal.speed;
     }
     else if (input.backward) {
-      this.vx = -Constants.player.normal.speed;
+      this.vx += -Constants.player.normal.speed;
     }
   }
 
   Player.prototype.processInputAsVertical = function(input) {
     if (input.forward) {
-      this.vy = Constants.player.normal.speed;
+      this.vy += Constants.player.normal.speed;
     }
     else if (input.backward) {
-      this.vy = -Constants.player.normal.speed;
+      this.vy += -Constants.player.normal.speed;
     }
   }
 

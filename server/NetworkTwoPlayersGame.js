@@ -6,6 +6,8 @@ var Constants = require('../common/Constants');
 var NetworkTwoPlayersGame = function(network) {
   AbstractNetworkGame.call(this, network);
 
+  this.gameStatusId = 1;
+
   this.gameLogic = new TwoPlayersGameLogic(Constants.game.width, Constants.game.height);
   this.gameInput = new GameInput(this.gameLogic);
 
@@ -28,8 +30,8 @@ NetworkTwoPlayersGame.prototype.onNewPlayer = function(player) {
 }
 
 NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {
- player.lastPendingInputId = input.id;
- this.gameInput.addInput(input.entityId, input);
+  player.lastPendingInputId = input.id;
+  this.gameInput.inputs.push(input);
 }
 
 NetworkTwoPlayersGame.prototype.gameLoop = function() {
@@ -43,11 +45,13 @@ NetworkTwoPlayersGame.prototype.updatePlayersLastInput = function() {
   this.players.forEach(function(player) {
     player.lastInputId = player.lastPendingInputId;
   });
+
 }
 
 NetworkTwoPlayersGame.prototype.updateLoop = function() {
   var gameStatus = {};
 
+  gameStatus.id = this.gameStatusId++;
   gameStatus.entities = [];
 
   this.gameLogic.entities.forEach(function(entity){

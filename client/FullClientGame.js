@@ -3,20 +3,20 @@
 
   var FullClientGame = function(ctx, width, height) {
     // create the core object for the game
-    this.gameLogic = new ClientTwoPlayersGameLogic.class(width, height);
-    this.gameRenderer = new GameRenderer.class(ctx, this.gameLogic);
+    this.clientGameLogic = new ClientTwoPlayersGameLogic.class(width, height);
+    this.gameRenderer = new GameRenderer.class(ctx, this.clientGameLogic);
     this.network = new NetworkClient.class(new io());
 
     // register a renderer for each type of entities
     this.gameRenderer.addRenderer("Player", PlayerRenderer);
     this.gameRenderer.addRenderer("Ball", BallRenderer);
 
-    this.keyboardController = new KeyboardController.class(this.gameLogic);
+    this.keyboardController = new KeyboardController.class(this.clientGameLogic);
 
-//    this.keyboardController.addEntityInput(this.gameLogic.player.id, Constants.key.W, "backward");
-//    this.keyboardController.addEntityInput(this.gameLogic.player.id, Constants.key.S, "forward");
+//    this.keyboardController.addEntityInput(this.clientGameLogic.player.id, Constants.key.W, "backward");
+//    this.keyboardController.addEntityInput(this.clientGameLogic.player.id, Constants.key.S, "forward");
 
-    this.keyboardController.gameInput.applyInputs = false;
+//    this.keyboardController.gameInput.applyInputs = false;
     this.keyboardController.gameInput.addListener('game', this.onInput.bind(this));
 
     this.network.latency = Constants.game.latency;
@@ -25,8 +25,12 @@
   }
 
   FullClientGame.prototype.update = function() {
+    this.clientGameLogic.reconciliation();
+
     this.keyboardController.update();
-    this.gameLogic.update();
+    this.clientGameLogic.update();
+
+
   }
 
   FullClientGame.prototype.render = function() {
@@ -35,11 +39,10 @@
   }
 
   FullClientGame.prototype.onConnected = function(data) {
-    console.log(data.me);
-    this.me = this.gameLogic.getEntityById(data.me);
+    this.clientGameLogic.me = this.clientGameLogic.getEntityById(data.me);
 
-    this.keyboardController.addEntityInput(this.me.id, Constants.key.DOWN, "forward");
-    this.keyboardController.addEntityInput(this.me.id, Constants.key.UP, "backward");
+    this.keyboardController.addEntityInput(this.clientGameLogic.me.id, Constants.key.DOWN, "forward");
+    this.keyboardController.addEntityInput(this.clientGameLogic.me.id, Constants.key.UP, "backward");
 
     // set the loops for the game logic and the renderer
     setInterval(this.update.bind(this), Constants.game.gameLoopTime);
@@ -47,18 +50,11 @@
   }
 
   FullClientGame.prototype.onUpdate = function(update) {
-    var self = this;
-
-    update.entities.forEach(function(entityStatus){
-      var localEntity = self.gameLogic.getEntityById(entityStatus.id);
-
-      if (localEntity) {
-        localEntity.setStatus(entityStatus);
-      }
-    });
+    this.clientGameLogic.gameUpdates.push(update);
   }
 
   FullClientGame.prototype.onInput = function(input) {
+    this.clientGameLogic.pendingInputs.push(input);
     this.network.emit('input', input);
   }
 
