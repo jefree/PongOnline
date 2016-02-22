@@ -37,7 +37,7 @@ NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {
 
 NetworkTwoPlayersGame.prototype.gameLoop = function() {
   this.gameInput.update();
-  this.gameLogic.update();
+  this.gameLogic._update();
 
   this.updatePlayersLastInput();
 }
@@ -55,6 +55,7 @@ NetworkTwoPlayersGame.prototype.updateLoop = function() {
   gameStatus.id = this.gameStatusId++;
   gameStatus.entities = [];
   gameStatus.lastInputId = {};
+  gameStatus.time = this.gameLogic.time;
 
   this.gameLogic.entities.forEach(function(entity){
     var entityStatus = entity.getStatus();

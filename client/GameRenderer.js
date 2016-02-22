@@ -14,6 +14,10 @@
       // find the correct renderer for this type of entity and use it
       this.renderers[entity.type].render(entity);
     }.bind(this));
+
+    this.ctx.fillStyle = "#0F0";
+    this.ctx.font = "14px Sans"
+    this.ctx.fillText("time: " + this.game.time.toFixed(2), this.game.width-150, 20);
   }
 
   GameRenderer.prototype.addRenderer = function(type, rendererClass) {

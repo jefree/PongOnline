@@ -28,7 +28,7 @@
     this.clientGameLogic.reconciliation();
 
     this.keyboardController.update();
-    this.clientGameLogic.update();
+    this.clientGameLogic._update();
   }
 
   FullClientGame.prototype.render = function() {

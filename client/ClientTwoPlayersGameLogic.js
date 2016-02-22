@@ -1,5 +1,6 @@
 (function(exports) {
   var TwoPlayersGameLogic = require('../common/TwoPlayersGameLogic').class;
+  var Util = require('../common/Util');
 
   var ClientTwoPlayersGameLogic = function (width, height) {
     TwoPlayersGameLogic.call(this, width, height);
@@ -20,13 +21,14 @@
       return;
     }
 
-    console.log("apply reconciliation");
+    this.time = lastGameUpdate.time; //sync the time
+
     this.updateFromGameUpdate(lastGameUpdate);
     this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
+    this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
   }
 
   ClientTwoPlayersGameLogic.prototype.processPendingInputsFrom = function(lastInputId) {
-    console.log("lastInputID", lastInputId);
 
     for (var i=this.pendingInputs.length-1; i>=0; i--) {
       var pendingInput = this.pendingInputs[i];
@@ -42,9 +44,6 @@
       this.me.processInput(input);
       this.me.update();
     }
-    console.log("final", this.me.x, this.me.y);
-    console.log("pendin inputs", this.pendingInputs.length);
-    console.log("------------");
 
   }
 
@@ -64,16 +63,72 @@
   }
 
   ClientTwoPlayersGameLogic.prototype.updateFromGameUpdate = function(update) {
-    var self = this;
+    var myNewSelf = null;
+    var i = 0;
 
-    console.log("before", this.me.x, this.me.y);
-    update.entities.forEach(function(entityStatus){
-      var localEntity = self.getEntityById(entityStatus.id);
-
-      if (localEntity) {
-        localEntity.setStatus(entityStatus);
+    while (myNewSelf == null && i < update.entities.length) {
+      if (update.entities[i].id == this.me.id) {
+        myNewSelf = update.entities[i];
       }
-    });
+      i++;
+    }
+
+    if (myNewSelf) {
+      this.me.setStatus(myNewSelf);
+    }
+
+  }
+
+  ClientTwoPlayersGameLogic.prototype.interpolateEntitiesAt = function (pastTime) {
+
+    //find the states for which the delay is between them
+    var prevState = nextState = null;
+
+    for (var i=0; i<this.gameUpdates.length; i++) {
+      var p = this.gameUpdates[i];
+      var n = this.gameUpdates[i+1];
+
+      if (p.time < pastTime && n.time > pastTime) {
+        prevState = p;
+        nextState = n;
+      }
+    }
+    
+    // too much lag sorry about that
+    if (prevState == null && nextState == null) {
+      return;
+    }
+
+    var elapsedTime = (pastTime - prevState.time) / (nextState.time - prevState.time)
+
+    //interpolate the opponet position
+    for ( index in this.entities ) {
+      var entity = this.entities[index];
+
+      if (entity.id == this.me.id) {
+        return;
+      }
+
+      var prevEntity = this.getEntityInState(prevState, entity.id);
+      var nextEntity = this.getEntityInState(nextState, entity.id);
+
+      entity.x = Util.lerp(prevEntity.x, nextEntity.x, elapsedTime);
+      entity.y = Util.lerp(prevEntity.y, nextEntity.y, elapsedTime);
+    }
+
+  }
+
+  ClientTwoPlayersGameLogic.prototype.getEntityInState = function(state, id) {
+    var entity = null;
+
+    while (entity == null && i < state.entities.length) {
+      if (state.entities[i].id == id) {
+        entity = state.entities[i];
+      }
+      i++;
+    }
+
+    return entity;
   }
 
   exports.class = ClientTwoPlayersGameLogic;

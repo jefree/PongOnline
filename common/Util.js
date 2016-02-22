@@ -22,6 +22,10 @@
     return copy;
   }
 
+  function lerp (begin, end, time) {
+    return (1-time)*begin + time*end;
+  }
+
   exports.clone = clone;
 
 })(typeof exports !== "undefined" ? exports : window["Util"]={});

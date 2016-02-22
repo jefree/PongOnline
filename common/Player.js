@@ -13,13 +13,13 @@
     this.playerType = playerType || Constants.player.type.horizantal;
   }
 
-  Player.prototype.move = function(){
-    this.x += this.vx * this.game.delta;
-    this.y += this.vy * this.game.delta;
+  Player.prototype.move = function(delta){
+    this.x += this.vx * delta;
+    this.y += this.vy * delta;
   }
 
-  Player.prototype.update = function() {
-    this.move();
+  Player.prototype.update = function(delta) {
+    this.move(delta);
     this.vx = this.vy = 0;
   }
 

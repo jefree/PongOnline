@@ -34,12 +34,11 @@
   TwoPlayersGameLogic.prototype = Object.create(GameLogic.prototype);
   TwoPlayersGameLogic.prototype.constructor = TwoPlayersGameLogic;
 
-  TwoPlayersGameLogic.prototype.update = function() {
-    this.delta = Constants.game.gameLoopTime / 1000;
+  TwoPlayersGameLogic.prototype.update = function(delta) {
 
-    this.player.update();
-    this.opponent.update();
-    this.ball.update();
+    this.player.update(delta);
+    this.opponent.update(delta);
+    this.ball.update(delta);
 
     this.checkBallBoundsCollision();
 

@@ -1,14 +1,25 @@
 (function(exports) {
+  var Constants = require("./Constants");
 
   var GameLogic = function(width, height) {
     this.width = width;
     this.height = height;
 
     this.currentId = 1;
+    this.time = 0;
     this.entities = [];
   }
 
-  GameLogic.prototype.update = function() {
+  // this must be the method to call for the game  loop
+  GameLogic.prototype._update = function() {
+    var delta = Constants.game.gameLoopTime / 1000; //also we can calculate the elapsed time since the last frame
+    this.time += delta;
+    this.update(delta);
+  }
+
+  // each game has an specific update implementation
+  GameLogic.prototype.update = function(delta) {
+    throw "Not Implemented Error";
   }
 
   GameLogic.prototype.addEntity = function(entity){

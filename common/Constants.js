@@ -5,7 +5,8 @@
 
     gameLoopTime: 22,
     updateLoopTime: 45,
-    latency: 50
+    latency: 50,
+    interpolationTime: 100
 
   };
 
