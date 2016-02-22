@@ -29,8 +29,6 @@
 
     this.keyboardController.update();
     this.clientGameLogic.update();
-
-
   }
 
   FullClientGame.prototype.render = function() {
@@ -50,6 +48,7 @@
   }
 
   FullClientGame.prototype.onUpdate = function(update) {
+    console.log("new update");
     this.clientGameLogic.gameUpdates.push(update);
   }
 

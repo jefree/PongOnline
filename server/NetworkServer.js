@@ -11,6 +11,7 @@ NetworkServer.prototype = Object.create(AbstractNetworkServer.prototype);
 NetworkServer.prototype.constructor = NetworkServer;
 
 NetworkServer.prototype.createNewGame = function() {
+  console.log("new game", this.games.length+1);
   return new NetworkTwoPlayersGame(this);
 }
 

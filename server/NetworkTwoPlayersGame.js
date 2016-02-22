@@ -25,6 +25,7 @@ NetworkTwoPlayersGame.prototype.isAvailable = function() {
 NetworkTwoPlayersGame.prototype.onNewPlayer = function(player) {
   var entity = this.players.length == 1 ? this.gameLogic.player : this.gameLogic.opponent;
   player.entity = entity;
+  player.lastPendingInputId = 0;
 
   return { me : player.entity.id };
 }
@@ -35,8 +36,8 @@ NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {
 }
 
 NetworkTwoPlayersGame.prototype.gameLoop = function() {
-  this.gameLogic.update();
   this.gameInput.update();
+  this.gameLogic.update();
 
   this.updatePlayersLastInput();
 }
@@ -53,6 +54,7 @@ NetworkTwoPlayersGame.prototype.updateLoop = function() {
 
   gameStatus.id = this.gameStatusId++;
   gameStatus.entities = [];
+  gameStatus.lastInputId = {};
 
   this.gameLogic.entities.forEach(function(entity){
     var entityStatus = entity.getStatus();
@@ -62,8 +64,11 @@ NetworkTwoPlayersGame.prototype.updateLoop = function() {
 
   for ( index in this.players) {
     var player = this.players[index];
-    gameStatus.lastInputId = player.lastInputId;
+    gameStatus.lastInputId[player.entity.id] = player.lastInputId;
+  }
 
+  for ( index in this.players) {
+    var player = this.players[index];
     player.emit('update', gameStatus);
   }
 }

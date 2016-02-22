@@ -20,12 +20,15 @@
       return;
     }
 
+    console.log("apply reconciliation");
     this.updateFromGameUpdate(lastGameUpdate);
-    this.processPendingInputsFrom(lastGameUpdate.lastInputId);
+    this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
   }
 
   ClientTwoPlayersGameLogic.prototype.processPendingInputsFrom = function(lastInputId) {
-     for (var i=this.pendingInputs.length-1; i>=0; i--) {
+    console.log("lastInputID", lastInputId);
+
+    for (var i=this.pendingInputs.length-1; i>=0; i--) {
       var pendingInput = this.pendingInputs[i];
       
       if ( pendingInput.id <= lastInputId ) {
@@ -39,6 +42,9 @@
       this.me.processInput(input);
       this.me.update();
     }
+    console.log("final", this.me.x, this.me.y);
+    console.log("pendin inputs", this.pendingInputs.length);
+    console.log("------------");
 
   }
 
@@ -60,7 +66,7 @@
   ClientTwoPlayersGameLogic.prototype.updateFromGameUpdate = function(update) {
     var self = this;
 
-
+    console.log("before", this.me.x, this.me.y);
     update.entities.forEach(function(entityStatus){
       var localEntity = self.getEntityById(entityStatus.id);
 
