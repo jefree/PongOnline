@@ -12,9 +12,9 @@
 
   // this must be the method to call for the game  loop
   GameLogic.prototype._update = function() {
-    var delta = Constants.game.gameLoopTime / 1000; //also we can calculate the elapsed time since the last frame
-    this.time += delta;
-    this.update(delta);
+    this.delta = Constants.game.gameLoopTime / 1000; //also we can calculate the elapsed time since the last frame
+    this.time += this.delta;
+    this.update(this.delta);
   }
 
   // each game has an specific update implementation

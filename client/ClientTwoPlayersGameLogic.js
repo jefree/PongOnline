@@ -13,19 +13,34 @@
   ClientTwoPlayersGameLogic.prototype = Object.create(TwoPlayersGameLogic.prototype);
   ClientTwoPlayersGameLogic.prototype.constructor = ClientTwoPlayersGameLogic;
 
+  ClientTwoPlayersGameLogic.prototype.update = function(delta) {
+    this.reconciliation();
+
+    this.me.update(delta);
+    console.log(this.me.x, this.me.y);
+    //this.opponent.update(delta);
+    //this.ball.update(delta);
+
+    //this.checkBallBoundsCollision();
+
+    //this.checkBallPlayerCollision(this.ball, this.me);
+    //this.checkBallPlayerCollision(this.ball, this.opponent);
+  }
+ 
   // reconciliate the most recent game status, if it isn't
   ClientTwoPlayersGameLogic.prototype.reconciliation = function() {
+    this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
+
     var lastGameUpdate = this.getLastGameUpdate();
 
     if ( lastGameUpdate == null ) {
       return;
     }
 
-    this.time = lastGameUpdate.time; //sync the time
+    this.time = lastGameUpdate.time;
 
     this.updateFromGameUpdate(lastGameUpdate);
     this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
-    this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
   }
 
   ClientTwoPlayersGameLogic.prototype.processPendingInputsFrom = function(lastInputId) {
@@ -42,7 +57,7 @@
       var input = this.pendingInputs[index];
 
       this.me.processInput(input);
-      this.me.update();
+      this.me.update(this.delta);
     }
 
   }
@@ -53,7 +68,7 @@
     for (index in this.gameUpdates) {
       var gameUpdate = this.gameUpdates[index];
 
-      if ( gameUpdate.id > this.lastGameUpdateId ) {
+      if (gameUpdate.id > this.lastGameUpdateId) {
         lastGameUpdate = gameUpdate;
         this.lastGameUpdateId = lastGameUpdate.id;
       }
@@ -80,33 +95,36 @@
   }
 
   ClientTwoPlayersGameLogic.prototype.interpolateEntitiesAt = function (pastTime) {
+    if (pastTime < 0) return;
 
     //find the states for which the delay is between them
     var prevState = nextState = null;
 
-    for (var i=0; i<this.gameUpdates.length; i++) {
+    for (var i=0; i<this.gameUpdates.length-1; i++) {
       var p = this.gameUpdates[i];
       var n = this.gameUpdates[i+1];
 
       if (p.time < pastTime && n.time > pastTime) {
         prevState = p;
         nextState = n;
+        break;
       }
     }
     
     // too much lag sorry about that
-    if (prevState == null && nextState == null) {
+    if (prevState == null || nextState == null) {
       return;
     }
 
     var elapsedTime = (pastTime - prevState.time) / (nextState.time - prevState.time)
+    console.log("et", elapsedTime);
 
     //interpolate the opponet position
     for ( index in this.entities ) {
       var entity = this.entities[index];
 
       if (entity.id == this.me.id) {
-        return;
+        continue;
       }
 
       var prevEntity = this.getEntityInState(prevState, entity.id);
@@ -115,11 +133,11 @@
       entity.x = Util.lerp(prevEntity.x, nextEntity.x, elapsedTime);
       entity.y = Util.lerp(prevEntity.y, nextEntity.y, elapsedTime);
     }
-
   }
 
   ClientTwoPlayersGameLogic.prototype.getEntityInState = function(state, id) {
     var entity = null;
+    var i = 0;
 
     while (entity == null && i < state.entities.length) {
       if (state.entities[i].id == id) {
@@ -129,6 +147,18 @@
     }
 
     return entity;
+  }
+
+  ClientTwoPlayersGameLogic.prototype.addGameUpdate = function(update) {
+    if (this.gameUpdates.length == 0 ||
+      update.time > this.gameUpdates[this.gameUpdates.length-1].time) 
+    {
+      this.gameUpdates.push(update);
+
+      if (this.gameUpdates.length > Constants.game.maxGameUpdatesBuffer) {
+        this.gameUpdates.shift();
+      }
+    }
   }
 
   exports.class = ClientTwoPlayersGameLogic;

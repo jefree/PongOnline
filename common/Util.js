@@ -27,5 +27,6 @@
   }
 
   exports.clone = clone;
+  exports.lerp = lerp;
 
 })(typeof exports !== "undefined" ? exports : window["Util"]={});

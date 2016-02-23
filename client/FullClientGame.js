@@ -25,8 +25,6 @@
   }
 
   FullClientGame.prototype.update = function() {
-    this.clientGameLogic.reconciliation();
-
     this.keyboardController.update();
     this.clientGameLogic._update();
   }
@@ -48,8 +46,7 @@
   }
 
   FullClientGame.prototype.onUpdate = function(update) {
-    console.log("new update");
-    this.clientGameLogic.gameUpdates.push(update);
+    this.clientGameLogic.addGameUpdate(update);
   }
 
   FullClientGame.prototype.onInput = function(input) {
