@@ -4,10 +4,10 @@
     height: 600,
 
     gameLoopTime: 20,
-    updateLoopTime: 45,
+    updateLoopTime: 50,
     latency: 50,
-    interpolationTime: 60,
-    maxGameUpdatesBuffer: 10
+    interpolationTime: 100,
+    maxGameUpdatesBuffer: 3
   };
 
   exports.key = {

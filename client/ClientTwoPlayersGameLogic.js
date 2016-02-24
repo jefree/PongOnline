@@ -17,7 +17,6 @@
     this.reconciliation();
 
     this.me.update(delta);
-    console.log(this.me.x, this.me.y);
     //this.opponent.update(delta);
     //this.ball.update(delta);
 
@@ -29,18 +28,21 @@
  
   // reconciliate the most recent game status, if it isn't
   ClientTwoPlayersGameLogic.prototype.reconciliation = function() {
-    this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
+  console.log("------");
 
     var lastGameUpdate = this.getLastGameUpdate();
 
-    if ( lastGameUpdate == null ) {
-      return;
+    if ( lastGameUpdate ) {
+      console.log("gamt time", this.time);
+      console.log("update", lastGameUpdate.id, lastGameUpdate.time);
+
+      //this.time = lastGameUpdate.time;
+
+      this.updateFromGameUpdate(lastGameUpdate);
+      this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
     }
 
-    this.time = lastGameUpdate.time;
-
-    this.updateFromGameUpdate(lastGameUpdate);
-    this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
+    this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
   }
 
   ClientTwoPlayersGameLogic.prototype.processPendingInputsFrom = function(lastInputId) {
@@ -91,20 +93,20 @@
     if (myNewSelf) {
       this.me.setStatus(myNewSelf);
     }
-
   }
 
   ClientTwoPlayersGameLogic.prototype.interpolateEntitiesAt = function (pastTime) {
+  console.log("past time:", pastTime);
     if (pastTime < 0) return;
 
-    //find the states for which the delay is between them
+    //find the states for which the pastTime is between them
     var prevState = nextState = null;
 
     for (var i=0; i<this.gameUpdates.length-1; i++) {
       var p = this.gameUpdates[i];
       var n = this.gameUpdates[i+1];
 
-      if (p.time < pastTime && n.time > pastTime) {
+      if (p.time <= pastTime && n.time > pastTime) {
         prevState = p;
         nextState = n;
         break;
@@ -116,6 +118,7 @@
       return;
     }
 
+    console.log(prevState.id, nextState.id);
     var elapsedTime = (pastTime - prevState.time) / (nextState.time - prevState.time)
     console.log("et", elapsedTime);
 
@@ -133,6 +136,8 @@
       entity.x = Util.lerp(prevEntity.x, nextEntity.x, elapsedTime);
       entity.y = Util.lerp(prevEntity.y, nextEntity.y, elapsedTime);
     }
+
+    console.log(this.ball.x, this.ball.y);
   }
 
   ClientTwoPlayersGameLogic.prototype.getEntityInState = function(state, id) {

@@ -27,7 +27,7 @@ NetworkTwoPlayersGame.prototype.onNewPlayer = function(player) {
   player.entity = entity;
   player.lastPendingInputId = 0;
 
-  return { me : player.entity.id };
+  return { me : player.entity.id, time: this.gameLogic.time};
 }
 
 NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {
@@ -48,8 +48,15 @@ NetworkTwoPlayersGame.prototype.updatePlayersLastInput = function() {
   });
 
 }
-
+var time = null;
 NetworkTwoPlayersGame.prototype.updateLoop = function() {
+if (time != null){
+  console.log(Date.now() - time);
+  time = Date.now();
+}
+else {
+  time = Date.now();
+}
   var gameStatus = {};
 
   gameStatus.id = this.gameStatusId++;
