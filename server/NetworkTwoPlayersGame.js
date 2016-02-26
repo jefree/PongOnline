@@ -35,7 +35,9 @@ NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {
   this.gameInput.inputs.push(input);
 }
 
+var frames = 0;
 NetworkTwoPlayersGame.prototype.gameLoop = function() {
+frames++;
   this.gameInput.update();
   this.gameLogic._update();
 
@@ -48,15 +50,11 @@ NetworkTwoPlayersGame.prototype.updatePlayersLastInput = function() {
   });
 
 }
-var time = null;
+
 NetworkTwoPlayersGame.prototype.updateLoop = function() {
-if (time != null){
-  console.log(Date.now() - time);
-  time = Date.now();
-}
-else {
-  time = Date.now();
-}
+//console.log(frames);
+//console.log(this.gameLogic.time);
+frames = 0;
   var gameStatus = {};
 
   gameStatus.id = this.gameStatusId++;

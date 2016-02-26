@@ -1,5 +1,6 @@
 (function(exports) {
   var Constants = require('../common/Constants');
+  var Util = require('../common/Util');
 
   var FullClientGame = function(ctx, width, height) {
     // create the core object for the game
@@ -42,11 +43,13 @@
     this.keyboardController.addEntityInput(this.clientGameLogic.me.id, Constants.key.UP, "backward");
 
     // set the loops for the game logic and the renderer
-    setInterval(this.update.bind(this), Constants.game.gameLoopTime);
+    var gameLoopInterval = new Util.interval(this.update.bind(this), Constants.game.gameLoopTime);
+    gameLoopInterval.run();
     requestAnimationFrame(this.render.bind(this));
   }
 
   FullClientGame.prototype.onUpdate = function(update) {
+    console.log("orale");
     this.clientGameLogic.addGameUpdate(update);
   }
 

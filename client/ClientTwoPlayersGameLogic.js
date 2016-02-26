@@ -25,19 +25,23 @@
     //this.checkBallPlayerCollision(this.ball, this.me);
     //this.checkBallPlayerCollision(this.ball, this.opponent);
   }
- 
+var frames = 0; 
+var lTime = 0;
+var lUTime = 0;
   // reconciliate the most recent game status, if it isn't
   ClientTwoPlayersGameLogic.prototype.reconciliation = function() {
-  console.log("------");
-
+frames++;
     var lastGameUpdate = this.getLastGameUpdate();
 
     if ( lastGameUpdate ) {
-      console.log("gamt time", this.time);
-      console.log("update", lastGameUpdate.id, lastGameUpdate.time);
-
       //this.time = lastGameUpdate.time;
-
+//console.log(frames);
+//console.log("client", this.time -lTime);
+//console.log(lastGameUpdate.time - this.time);
+//console.log(lastGameUpdate.time - lUTime);
+lTime = this.time;
+lUTime = lastGameUpdate.time;
+frames = 0;
       this.updateFromGameUpdate(lastGameUpdate);
       this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
     }
@@ -65,15 +69,14 @@
   }
 
   ClientTwoPlayersGameLogic.prototype.getLastGameUpdate = function() {
+    if (this.gameUpdates.length == 0) return;
+
     var lastGameUpdate = null;
+    var gameUpdate = this.gameUpdates[this.gameUpdates.length-1];
 
-    for (index in this.gameUpdates) {
-      var gameUpdate = this.gameUpdates[index];
-
-      if (gameUpdate.id > this.lastGameUpdateId) {
-        lastGameUpdate = gameUpdate;
-        this.lastGameUpdateId = lastGameUpdate.id;
-      }
+    if (gameUpdate.id > this.lastGameUpdateId) {
+      lastGameUpdate = gameUpdate;
+      this.lastGameUpdateId = lastGameUpdate.id;
     }
 
     return lastGameUpdate;
@@ -96,7 +99,6 @@
   }
 
   ClientTwoPlayersGameLogic.prototype.interpolateEntitiesAt = function (pastTime) {
-  console.log("past time:", pastTime);
     if (pastTime < 0) return;
 
     //find the states for which the pastTime is between them
@@ -118,9 +120,7 @@
       return;
     }
 
-    console.log(prevState.id, nextState.id);
     var elapsedTime = (pastTime - prevState.time) / (nextState.time - prevState.time)
-    console.log("et", elapsedTime);
 
     //interpolate the opponet position
     for ( index in this.entities ) {
@@ -137,7 +137,6 @@
       entity.y = Util.lerp(prevEntity.y, nextEntity.y, elapsedTime);
     }
 
-    console.log(this.ball.x, this.ball.y);
   }
 
   ClientTwoPlayersGameLogic.prototype.getEntityInState = function(state, id) {

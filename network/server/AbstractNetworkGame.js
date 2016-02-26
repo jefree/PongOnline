@@ -1,4 +1,5 @@
 var NetworkPlayer = require('./NetworkPlayer').class;
+var Util = require('../../common/Util');
 
 // A ServerGame contains all the connected players to a specific game instance
 // when a new player arrives, it sets all the events for this new player and
@@ -32,8 +33,11 @@ AbstractServerGame.prototype.addNewPlayer = function(socket) {
 
 AbstractServerGame.prototype.beginGame = function(gameLoopTime, updateLoopTime) {
   //set intervals for the game logic and input as well as for game update.
-  this.gameUpdateLoopId = setInterval(this.gameLoop.bind(this), gameLoopTime);
-  this.gameBroadcastUpdateLoopId = setInterval(this.updateLoop.bind(this), updateLoopTime);
+  this.gameUpdateLoopId = new Util.interval(this.gameLoop.bind(this), gameLoopTime);
+  this.gameBroadcastUpdateLoopId = new Util.interval(this.updateLoop.bind(this), updateLoopTime);
+
+  this.gameUpdateLoopId.run();
+  this.gameBroadcastUpdateLoopId.run();
 }
   
 // Register a new event for the players
