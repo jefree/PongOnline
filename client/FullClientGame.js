@@ -49,7 +49,6 @@
   }
 
   FullClientGame.prototype.onUpdate = function(update) {
-    console.log("orale");
     this.clientGameLogic.addGameUpdate(update);
   }
 

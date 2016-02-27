@@ -25,28 +25,18 @@
     //this.checkBallPlayerCollision(this.ball, this.me);
     //this.checkBallPlayerCollision(this.ball, this.opponent);
   }
-var frames = 0; 
-var lTime = 0;
-var lUTime = 0;
+
   // reconciliate the most recent game status, if it isn't
   ClientTwoPlayersGameLogic.prototype.reconciliation = function() {
-frames++;
     var lastGameUpdate = this.getLastGameUpdate();
 
     if ( lastGameUpdate ) {
-      //this.time = lastGameUpdate.time;
-//console.log(frames);
-//console.log("client", this.time -lTime);
-//console.log(lastGameUpdate.time - this.time);
-//console.log(lastGameUpdate.time - lUTime);
-lTime = this.time;
-lUTime = lastGameUpdate.time;
-frames = 0;
       this.updateFromGameUpdate(lastGameUpdate);
       this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
     }
 
     this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
+
   }
 
   ClientTwoPlayersGameLogic.prototype.processPendingInputsFrom = function(lastInputId) {
@@ -120,6 +110,7 @@ frames = 0;
       return;
     }
 
+    console.log(prevState.time, pastTime, nextState.time);    
     var elapsedTime = (pastTime - prevState.time) / (nextState.time - prevState.time)
 
     //interpolate the opponet position
