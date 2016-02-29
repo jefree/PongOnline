@@ -18,6 +18,10 @@
     this.ctx.fillStyle = "#0F0";
     this.ctx.font = "14px Sans"
     this.ctx.fillText("time: " + this.game.time.toFixed(2), this.game.width-150, 20);
+
+    this.ctx.fillStyle = "#0FF";
+    this.ctx.font = "14px Sans"
+    this.ctx.fillText("ping: " + (this.game.ping * 1000).toFixed(0), this.game.width-150, 40);
   }
 
   GameRenderer.prototype.addRenderer = function(type, rendererClass) {

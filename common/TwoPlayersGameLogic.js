@@ -7,6 +7,8 @@
   var TwoPlayersGameLogic  = function(width, height) {
     GameLogic.call(this, width, height);
 
+    this.gameStatusId = 1;
+
     // create the entity for the current player and this to the game
     this.player = new Player(Constants.player.normal.radius, Constants.player.type.vertical);
     this.addEntity(this.player);
@@ -90,6 +92,22 @@
 
   TwoPlayersGameLogic.prototype.distanceBetween = function(p1, p2) {
     return Math.sqrt( Math.pow(p2.x - p1.x, 2)+Math.pow(p1.y - p2.y, 2));
+  }
+
+  TwoPlayersGameLogic.prototype.getStatus = function() {
+    var gameStatus = {};
+
+    gameStatus.id = this.gameStatusId++;
+    gameStatus.entities = [];
+    gameStatus.time = this.time;
+
+    this.entities.forEach(function(entity){
+      var entityStatus = entity.getStatus();
+      entityStatus.id = entity.id;
+      gameStatus.entities.push(entityStatus);
+    });
+
+    return gameStatus;
   }
 
   exports.class = TwoPlayersGameLogic;

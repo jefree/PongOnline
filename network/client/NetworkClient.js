@@ -2,6 +2,7 @@
   var AbstractClientNetwork = function(socket) {
     this.socket = socket;
     this.latency = 0;
+    this.ping = 0;
   }
 
   AbstractClientNetwork.prototype.on = function(name, callback) {
@@ -32,6 +33,10 @@
 
   AbstractClientNetwork.prototype.onUpdate = function(callback) {
     this.on('update', callback);
+  }
+
+  AbstractClientNetwork.prototype.onPing = function(callback) {
+    this.on('onping', callback);
   }
 
   exports.class = AbstractClientNetwork;

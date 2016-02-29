@@ -8,6 +8,7 @@
     this.me = null; // the entity for this player
     this.pendingInputs = [];
     this.gameUpdates = [];
+    this.gameServerUpdates = [];
     this.lastGameUpdateId = 0;
   }
   ClientTwoPlayersGameLogic.prototype = Object.create(TwoPlayersGameLogic.prototype);
@@ -20,10 +21,11 @@
     //this.opponent.update(delta);
     //this.ball.update(delta);
 
-    //this.checkBallBoundsCollision();
+    this.checkBallBoundsCollision();
 
-    //this.checkBallPlayerCollision(this.ball, this.me);
+    this.checkBallPlayerCollision(this.ball, this.me);
     //this.checkBallPlayerCollision(this.ball, this.opponent);
+    this.gameUpdates.push(this.getStatus());
   }
 
   // reconciliate the most recent game status, if it isn't
@@ -31,6 +33,14 @@
     var lastGameUpdate = this.getLastGameUpdate();
 
     if ( lastGameUpdate ) {
+      for (i in this.gameUpdates) {
+        var status = this.gameUpdates[i];
+        if ( status.time >= lastGameUpdate.time - this.ping) {
+            console.log(status.entities[0], lastGameUpdate.entities[0]);
+            break;
+        }
+      }
+
       this.updateFromGameUpdate(lastGameUpdate);
       this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
     }
@@ -59,10 +69,10 @@
   }
 
   ClientTwoPlayersGameLogic.prototype.getLastGameUpdate = function() {
-    if (this.gameUpdates.length == 0) return;
+    if (this.gameServerUpdates.length == 0) return;
 
     var lastGameUpdate = null;
-    var gameUpdate = this.gameUpdates[this.gameUpdates.length-1];
+    var gameUpdate = this.gameServerUpdates[this.gameServerUpdates.length-1];
 
     if (gameUpdate.id > this.lastGameUpdateId) {
       lastGameUpdate = gameUpdate;
@@ -94,9 +104,9 @@
     //find the states for which the pastTime is between them
     var prevState = nextState = null;
 
-    for (var i=0; i<this.gameUpdates.length-1; i++) {
-      var p = this.gameUpdates[i];
-      var n = this.gameUpdates[i+1];
+    for (var i=0; i<this.gameServerUpdates.length-1; i++) {
+      var p = this.gameServerUpdates[i];
+      var n = this.gameServerUpdates[i+1];
 
       if (p.time <= pastTime && n.time > pastTime) {
         prevState = p;
@@ -110,7 +120,6 @@
       return;
     }
 
-    console.log(prevState.time, pastTime, nextState.time);    
     var elapsedTime = (pastTime - prevState.time) / (nextState.time - prevState.time)
 
     //interpolate the opponet position
@@ -145,13 +154,13 @@
   }
 
   ClientTwoPlayersGameLogic.prototype.addGameUpdate = function(update) {
-    if (this.gameUpdates.length == 0 ||
-      update.time > this.gameUpdates[this.gameUpdates.length-1].time) 
+    if (this.gameServerUpdates.length == 0 ||
+      update.time > this.gameServerUpdates[this.gameServerUpdates.length-1].time) 
     {
-      this.gameUpdates.push(update);
+      this.gameServerUpdates.push(update);
 
-      if (this.gameUpdates.length > Constants.game.maxGameUpdatesBuffer) {
-        this.gameUpdates.shift();
+      if (this.gameServerUpdates.length > Constants.game.maxGameUpdatesBuffer) {
+        this.gameServerUpdates.shift();
       }
     }
   }

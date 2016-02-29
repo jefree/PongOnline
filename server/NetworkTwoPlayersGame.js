@@ -6,12 +6,11 @@ var Constants = require('../common/Constants');
 var NetworkTwoPlayersGame = function(network) {
   AbstractNetworkGame.call(this, network);
 
-  this.gameStatusId = 1;
-
   this.gameLogic = new TwoPlayersGameLogic(Constants.game.width, Constants.game.height);
   this.gameInput = new GameInput(this.gameLogic);
 
   this.addNewPlayerEvent('input', this.onPlayerInput.bind(this));
+  this.addNewPlayerEvent('onping', this.onPing.bind(this));
 
   this.beginGame(Constants.game.gameLoopTime, Constants.game.updateLoopTime);
 }
@@ -35,9 +34,11 @@ NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {
   this.gameInput.inputs.push(input);
 }
 
-var frames = 0;
+NetworkTwoPlayersGame.prototype.onPing = function(player, data) {
+  player.emit('onping', data);
+}
+
 NetworkTwoPlayersGame.prototype.gameLoop = function() {
-frames++;
   this.gameInput.update();
   this.gameLogic._update();
 
@@ -48,25 +49,11 @@ NetworkTwoPlayersGame.prototype.updatePlayersLastInput = function() {
   this.players.forEach(function(player) {
     player.lastInputId = player.lastPendingInputId;
   });
-
 }
 
 NetworkTwoPlayersGame.prototype.updateLoop = function() {
-//console.log(frames);
-//console.log(this.gameLogic.time);
-frames = 0;
-  var gameStatus = {};
-
-  gameStatus.id = this.gameStatusId++;
-  gameStatus.entities = [];
+  var gameStatus = this.gameLogic.getStatus();
   gameStatus.lastInputId = {};
-  gameStatus.time = this.gameLogic.time;
-
-  this.gameLogic.entities.forEach(function(entity){
-    var entityStatus = entity.getStatus();
-    entityStatus.id = entity.id;
-    gameStatus.entities.push(entityStatus);
-  });
 
   for ( index in this.players) {
     var player = this.players[index];

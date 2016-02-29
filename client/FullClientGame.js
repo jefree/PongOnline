@@ -23,6 +23,7 @@
     this.network.latency = Constants.game.latency;
     this.network.onConnected(this.onConnected.bind(this));
     this.network.onUpdate(this.onUpdate.bind(this));
+    this.network.onPing(this.onPing.bind(this));
   }
 
   FullClientGame.prototype.update = function() {
@@ -35,6 +36,10 @@
     requestAnimationFrame(this.render.bind(this));
   }
 
+  FullClientGame.prototype.requestPing = function() {
+    this.network.emit('onping', { time: this.clientGameLogic.time });
+  }
+
   FullClientGame.prototype.onConnected = function(data) {
     this.clientGameLogic.time = data.time;
     this.clientGameLogic.me = this.clientGameLogic.getEntityById(data.me);
@@ -45,11 +50,19 @@
     // set the loops for the game logic and the renderer
     var gameLoopInterval = new Util.interval(this.update.bind(this), Constants.game.gameLoopTime);
     gameLoopInterval.run();
+
+    var pingLoopInterval = new Util.interval(this.requestPing.bind(this), Constants.game.pingLoopTime);
+    pingLoopInterval.run();
+
     requestAnimationFrame(this.render.bind(this));
   }
 
   FullClientGame.prototype.onUpdate = function(update) {
     this.clientGameLogic.addGameUpdate(update);
+  }
+
+  FullClientGame.prototype.onPing = function(data) {
+    this.clientGameLogic.ping = (this.clientGameLogic.time - data.time)/2;
   }
 
   FullClientGame.prototype.onInput = function(input) {

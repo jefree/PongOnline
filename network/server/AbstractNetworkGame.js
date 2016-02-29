@@ -17,18 +17,22 @@ AbstractServerGame.prototype.addNewPlayer = function(socket) {
 
   // register all the events for the new player
   // all the events receive the player and the data that has arrived
-  for (name in this.events) {
-    var event = this.events[name];
+  var self = this;
 
-    player.on(name, function(data) {
-
-      event.call(null, player, data);
-    });
+  for (var name in this.events) {
+    self.callPlayerEvent(player, name);
   }
 
   var newPlayerInfo = this.onNewPlayer(player);
 
   player.emit('connected', newPlayerInfo);
+}
+
+AbstractServerGame.prototype.callPlayerEvent = function(player, name) {
+  var event = this.events[name];
+  player.on(name, function(data) {
+    event.call(null, player, data);
+  });
 }
 
 AbstractServerGame.prototype.beginGame = function(gameLoopTime, updateLoopTime) {

@@ -9,18 +9,11 @@
     this.time = 0;
     this.entities = [];
   }
-var lTime = null;
-var sum = 0;
-var i = 0;
+
   // this must be the method to call for the game  loop
   GameLogic.prototype._update = function() {
     this.delta = Constants.game.gameLoopTime / 1000; //also we can calculate the elapsed time since the last frame
     this.time += this.delta;
-    if (lTime){
-      sum += Date.now()-lTime;
-   //   console.log(i++, sum);
-    }
-    lTime = Date.now();
     this.update(this.delta);
   }
 

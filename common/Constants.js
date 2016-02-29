@@ -7,7 +7,8 @@
     updateLoopTime: 50,
     latency: 50,
     interpolationTime: 100,
-    maxGameUpdatesBuffer: 4
+    maxGameUpdatesBuffer: 4,
+    pingLoopTime: 1000
   };
 
   exports.key = {
