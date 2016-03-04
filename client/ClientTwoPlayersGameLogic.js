@@ -7,7 +7,7 @@
 
     this.me = null; // the entity for this player
     this.pendingInputs = [];
-    this.gameUpdates = [];
+    this.gameStatuses = [];
     this.gameServerUpdates = [];
     this.lastGameUpdateId = 0;
   }
@@ -25,32 +25,42 @@
 
     this.checkBallPlayerCollision(this.ball, this.me);
     //this.checkBallPlayerCollision(this.ball, this.opponent);
-    this.gameUpdates.push(this.getStatus());
+    this.saveGameStatus();
   }
 
   // reconciliate the most recent game status, if it isn't
   ClientTwoPlayersGameLogic.prototype.reconciliation = function() {
     var lastGameUpdate = this.getLastGameUpdate();
 
-    if ( lastGameUpdate ) {
-      for (i in this.gameUpdates) {
-        var status = this.gameUpdates[i];
-        if ( status.time >= lastGameUpdate.time - this.ping) {
-            console.log(status.entities[0], lastGameUpdate.entities[0]);
-            break;
+    if (lastGameUpdate) {
+      this.cleanPendingInputsFrom(lastGameUpdate.lastInputId);
+
+      //check if it is neccesary apply pending inputs
+      for (var i in this.gameStatuses) {
+        var status =  this.gameStatuses[i];
+
+        if (status.lastInputId == lastGameUpdate.lastInputId[this.me.id]) {
+          var me = Util.getEntityByIdFromState(this.me.id, status);
+          var oldMe = Util.getEntityByIdFromState(this.me.id, lastGameUpdate);
+
+          if ( me && oldMe && me.y != oldMe.y ) {
+            this.updateFromGameUpdate(lastGameUpdate);
+            this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
+
+            //clean useless game statuses
+            this.gameStatuses.splice(0, i+1);
+          }
+          break;
         }
       }
 
-      this.updateFromGameUpdate(lastGameUpdate);
-      this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
+      console.log(this.gameStatuses.length, this.pendingInputs.length);
     }
 
     this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
-
   }
 
-  ClientTwoPlayersGameLogic.prototype.processPendingInputsFrom = function(lastInputId) {
-
+  ClientTwoPlayersGameLogic.prototype.cleanPendingInputsFrom = function(lastInputId) {
     for (var i=this.pendingInputs.length-1; i>=0; i--) {
       var pendingInput = this.pendingInputs[i];
       
@@ -58,6 +68,10 @@
         this.pendingInputs.splice(i, 1);
       }
     }
+  }
+
+  ClientTwoPlayersGameLogic.prototype.processPendingInputsFrom = function(lastInputId) {
+    console.log("here");
 
     for ( index in this.pendingInputs ) {
       var input = this.pendingInputs[index];
@@ -65,7 +79,6 @@
       this.me.processInput(input);
       this.me.update(this.delta);
     }
-
   }
 
   ClientTwoPlayersGameLogic.prototype.getLastGameUpdate = function() {
@@ -151,6 +164,20 @@
     }
 
     return entity;
+  }
+
+  ClientTwoPlayersGameLogic.prototype.saveGameStatus = function() {
+    var status = this.getStatus();
+
+    if (this.pendingInputs.length > 0) {
+      status.lastInputId = this.pendingInputs[this.pendingInputs.length-1].id;
+    }
+
+    this.gameStatuses.push(status);
+
+    if (this.gameStatuses.length > 10) { // TODO: move that constant to a better place
+      this.gameStatuses.shift();
+    }
   }
 
   ClientTwoPlayersGameLogic.prototype.addGameUpdate = function(update) {

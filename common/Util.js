@@ -51,11 +51,26 @@
     this.stop = function(){
       clearTimeout(this.timer)
     }
+  }
 
+  function getEntityByIdFromState(id, state) {
+    var entity = null, 
+             i = 0;
+
+    while(entity == null && i < state.entities.length) {
+      if (state.entities[i].id == id) {
+        entity = state.entities[i];
+      }
+      
+      i++;
+    }
+
+    return entity;
   }
 
   exports.clone = clone;
   exports.lerp = lerp;
   exports.interval = interval;
+  exports.getEntityByIdFromState = getEntityByIdFromState;
 
 })(typeof exports !== "undefined" ? exports : window["Util"]={});
