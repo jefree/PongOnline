@@ -13,9 +13,7 @@ NetworkPlayer.prototype.on = function(name, callback) {
   var self = this;
 
   this.socket.on(name, function(data){
-    self.delay(function(){
-      callback.call(null, data);
-   });
+    callback.call(null, data);
   });
 }
 

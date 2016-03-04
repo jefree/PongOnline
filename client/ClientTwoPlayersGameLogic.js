@@ -53,8 +53,6 @@
           break;
         }
       }
-
-      console.log(this.gameStatuses.length, this.pendingInputs.length);
     }
 
     this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
@@ -71,7 +69,6 @@
   }
 
   ClientTwoPlayersGameLogic.prototype.processPendingInputsFrom = function(lastInputId) {
-    console.log("here");
 
     for ( index in this.pendingInputs ) {
       var input = this.pendingInputs[index];

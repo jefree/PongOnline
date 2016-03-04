@@ -42,7 +42,6 @@
 
   FullClientGame.prototype.onConnected = function(data) {
     this.clientGameLogic.time = data.time;
-    console.log("id", data.me);
     this.clientGameLogic.me = this.clientGameLogic.getEntityById(data.me);
 
     this.keyboardController.addEntityInput(this.clientGameLogic.me.id, Constants.key.DOWN, "forward");
