@@ -1,6 +1,7 @@
 (function(exports) {
   var TwoPlayersGameLogic = require('../common/TwoPlayersGameLogic').class;
   var Util = require('../common/Util');
+  var Constants = require('../common/Constants');
 
   var ClientTwoPlayersGameLogic = function (width, height) {
     TwoPlayersGameLogic.call(this, width, height);
@@ -172,7 +173,7 @@
 
     this.gameStatuses.push(status);
 
-    if (this.gameStatuses.length > 10) { // TODO: move that constant to a better place
+    if (this.gameStatuses.length > Constants.maxGameStatusesBuffer) {
       this.gameStatuses.shift();
     }
   }

@@ -8,6 +8,7 @@
     latency: 50,
     interpolationTime: 100,
     maxGameUpdatesBuffer: 4,
+    maxGameStatusesBuffer: 10,
     pingLoopTime: 1000
   };
 
