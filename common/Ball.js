@@ -10,9 +10,13 @@
     this.radius = radius;
   }
 
-  Ball.prototype.update = function(delta) {
+  Ball.prototype.move = function(delta) {
     this.x += this.vx * delta;
     this.y += this.vy * delta;
+  }
+
+  Ball.prototype.update = function(delta) {
+    this.move(delta);
   }
 
   Ball.prototype.getStatus = function() {

@@ -5,7 +5,7 @@
 
     gameLoopTime: 20,
     updateLoopTime: 50,
-    latency: 50,
+    latency: 40,
     interpolationTime: 100,
     maxGameUpdatesBuffer: 4,
     maxGameStatusesBuffer: 10,

@@ -31,9 +31,12 @@
     
     this.run = function(){
       if(this.baseline === undefined){
-        this.baseline = new Date().getTime()
+        this.baseline = new Date().getTime();
       }
-      fn()
+      else {
+        fn();
+      }
+
       var end = new Date().getTime()
       this.baseline += duration
    

@@ -26,7 +26,7 @@ NetworkTwoPlayersGame.prototype.onNewPlayer = function(player) {
   player.entity = entity;
   player.lastPendingInputId = 0;
 
-  return { me : player.entity.id, time: this.gameLogic.time};
+  return { me : player.entity.id, time: this.gameLogic.time, gameStatus: this.gameLogic.getStatus()};
 }
 
 NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {

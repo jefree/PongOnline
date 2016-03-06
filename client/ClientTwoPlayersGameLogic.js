@@ -20,7 +20,7 @@
 
     this.me.update(delta);
     //this.opponent.update(delta);
-    //this.ball.update(delta);
+    this.ball.update(delta);
 
     this.checkBallBoundsCollision();
 
@@ -54,9 +54,11 @@
           break;
         }
       }
-    }
 
-    this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
+      this.correctEntities(lastGameUpdate, false);
+    }
+    // we dont interpolate the entities anymore cause now we are gonna predict the entities movement from now on
+    //this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
   }
 
   ClientTwoPlayersGameLogic.prototype.cleanPendingInputsFrom = function(lastInputId) {
@@ -133,7 +135,7 @@
 
     var elapsedTime = (pastTime - prevState.time) / (nextState.time - prevState.time)
 
-    //interpolate the opponet position
+    //interpolate the entitiy position
     for ( index in this.entities ) {
       var entity = this.entities[index];
 
@@ -147,8 +149,51 @@
       entity.x = Util.lerp(prevEntity.x, nextEntity.x, elapsedTime);
       entity.y = Util.lerp(prevEntity.y, nextEntity.y, elapsedTime);
     }
-
   }
+
+  ClientTwoPlayersGameLogic.prototype.correctEntities = function(gameUpdate, force) {
+    for (var i in gameUpdate.entities) {
+      var entity = gameUpdate.entities[i];
+
+      if (entity.id == this.me.id) {
+        continue;
+      }
+
+      var localEntity = this.getEntityById(entity.id);
+      this.updateEntityFor(localEntity, entity, gameUpdate.time, force);
+    }
+  }
+
+  ClientTwoPlayersGameLogic.prototype.updateEntityFor = function(entity, state, pastTime, force) {
+    var currentTime = this.time;
+
+    //we update the speed of the entity then get the time gap between currenttime and the
+    //update time (pasttime) and move the entity according to the time gap and then check 
+    //if the actual position and the predicted one differ each other too much, if so we
+    //update the position.
+
+    var localPositon = {
+      x: entity.x,
+      y: entity.y
+    };
+
+    var timeGap = currentTime - pastTime;
+
+    entity.setStatus(state);
+    entity.move(timeGap);
+
+    var difX = Math.abs (localPositon.x - entity.x);
+    var difY = Math.abs (localPositon.y - entity.y);
+
+    if (difX < 6 && difY < 6) {
+      entity.x = localPositon.x;
+      entity.y = localPositon.y
+      console.log("allow");
+    }
+    else {
+      console.log("nope");
+    }
+ }
 
   ClientTwoPlayersGameLogic.prototype.getEntityInState = function(state, id) {
     var entity = null;
