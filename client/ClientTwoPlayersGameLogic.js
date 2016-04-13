@@ -17,15 +17,7 @@
 
   ClientTwoPlayersGameLogic.prototype.update = function(delta) {
     this.reconciliation();
-
     this.me.update(delta);
-    //this.opponent.update(delta);
-    this.ball.update(delta);
-
-    this.checkBallBoundsCollision();
-
-    this.checkBallPlayerCollision(this.ball, this.me);
-    //this.checkBallPlayerCollision(this.ball, this.opponent);
     this.saveGameStatus();
   }
 
@@ -54,11 +46,9 @@
           break;
         }
       }
-
-      this.correctEntities(lastGameUpdate, false);
     }
-    // we dont interpolate the entities anymore cause now we are gonna predict the entities movement from now on
-    //this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
+
+    this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
   }
 
   ClientTwoPlayersGameLogic.prototype.cleanPendingInputsFrom = function(lastInputId) {
@@ -188,10 +178,8 @@
     if (difX < 6 && difY < 6) {
       entity.x = localPositon.x;
       entity.y = localPositon.y
-      console.log("allow");
     }
     else {
-      console.log("nope");
     }
  }
 

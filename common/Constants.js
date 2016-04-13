@@ -3,10 +3,10 @@
     width: 600,
     height: 600,
 
-    gameLoopTime: 20,
-    updateLoopTime: 50,
-    latency: 40,
-    interpolationTime: 100,
+    gameLoopTime: 16,
+    updateLoopTime: 30,
+    latency: 0,
+    interpolationTime: 50,
     maxGameUpdatesBuffer: 4,
     maxGameStatusesBuffer: 10,
     pingLoopTime: 1000
