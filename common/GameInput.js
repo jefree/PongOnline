@@ -18,22 +18,27 @@
     for (var i=this.game.entities.length-1; i>=0; i--) {
       var entity = this.game.entities[i];
 
-      for (var j=this.inputs.length-1; j>=0; j--) {
-        var input = this.inputs[j];
+      var inputs = this.inputs.filter(function(input){
+        return input.entityId == entity.id
+      });
 
-        if (input.entityId == entity.id) {
+      for (var j=0; j<inputs.length; j++) {
+        var input = inputs[j];
+
+        if (!this.game.isClient || input.time + 0.2 <= this.game.time) {
           entity.processInput(input);
-          this.inputs.splice(j, 1);
+          this.inputs.splice(this.inputs.indexOf(input), 1);
         }
       }
     }
   }
 
-  GameInput.prototype.addInput = function(id, input) {
+  GameInput.prototype.addInput = function(id, input, time) {
     var input = Util.clone(input);
 
     input.id = this.currentId++;
     input.entityId = id;
+    input.time = time;
 
     this.inputs.push(input);
 

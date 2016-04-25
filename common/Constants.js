@@ -4,10 +4,10 @@
     height: 600,
 
     gameLoopTime: 16,
-    updateLoopTime: 30,
-    latency: 0,
-    interpolationTime: 50,
-    maxGameUpdatesBuffer: 4,
+    updateLoopTime: 32,
+    latency: 100,
+    interpolationTime: 64,
+    maxGameUpdatesBuffer: 8,
     maxGameStatusesBuffer: 10,
     pingLoopTime: 1000
   };
@@ -26,7 +26,7 @@
   exports.player = {
     normal: {
       radius: 50,
-      speed: 250,
+      speed: 400,
     },
     type: {
       horizontal: 0,
@@ -37,7 +37,7 @@
   exports.ball = {
     normal: {
       radius: 20,
-      speed: 200,
+      speed: 300,
     }
   };
 

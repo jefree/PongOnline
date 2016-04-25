@@ -11,6 +11,7 @@
     this.gameStatuses = [];
     this.gameServerUpdates = [];
     this.lastGameUpdateId = 0;
+    this.isClient = true;
   }
   ClientTwoPlayersGameLogic.prototype = Object.create(TwoPlayersGameLogic.prototype);
   ClientTwoPlayersGameLogic.prototype.constructor = ClientTwoPlayersGameLogic;
@@ -25,28 +26,28 @@
   ClientTwoPlayersGameLogic.prototype.reconciliation = function() {
     var lastGameUpdate = this.getLastGameUpdate();
 
-    if (lastGameUpdate) {
-      this.cleanPendingInputsFrom(lastGameUpdate.lastInputId);
-
-      //check if it is neccesary apply pending inputs
-      for (var i in this.gameStatuses) {
-        var status =  this.gameStatuses[i];
-
-        if (status.lastInputId == lastGameUpdate.lastInputId[this.me.id]) {
-          var me = Util.getEntityByIdFromState(this.me.id, status);
-          var oldMe = Util.getEntityByIdFromState(this.me.id, lastGameUpdate);
-
-          if ( me && oldMe && me.y != oldMe.y ) {
-            this.updateFromGameUpdate(lastGameUpdate);
-            this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
-
-            //clean useless game statuses
-            this.gameStatuses.splice(0, i+1);
-          }
-          break;
-        }
-      }
-    }
+//    if (lastGameUpdate) {
+//      this.cleanPendingInputsFrom(lastGameUpdate.lastInputId);
+//
+//      //check if it is neccesary apply pending inputs
+//      for (var i in this.gameStatuses) {
+//        var status =  this.gameStatuses[i];
+//
+//        if (status.lastInputId == lastGameUpdate.lastInputId[this.me.id]) {
+//          var me = Util.getEntityByIdFromState(this.me.id, status);
+//          var oldMe = Util.getEntityByIdFromState(this.me.id, lastGameUpdate);
+//
+//          if ( me && oldMe && me.y != oldMe.y ) {
+//            this.updateFromGameUpdate(lastGameUpdate);
+//            this.processPendingInputsFrom(lastGameUpdate.lastInputId[this.me.id]);
+//
+//            //clean useless game statuses
+//            this.gameStatuses.splice(0, i+1);
+//          }
+//          break;
+//        }
+//      }
+//    }
 
     this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
   }

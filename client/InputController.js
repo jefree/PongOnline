@@ -1,6 +1,7 @@
 (function(exports) {
   var InputController =  function(game) {
-    this.gameInput = new GameInput.class(game);
+    this.game = game;
+    this.gameInput = new GameInput.class(this.game);
 
     // store the inputs for each registered player
     this.entityInputMap = {};
@@ -47,7 +48,7 @@
       }
 
       if ( Object.keys(inputSet).length > 0) {
-        this.gameInput.addInput(entityId, inputSet);
+        this.gameInput.addInput(entityId, inputSet, this.game.time);
       }
     }
 
