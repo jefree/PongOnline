@@ -5,11 +5,12 @@
 
     gameLoopTime: 16,
     updateLoopTime: 32,
-    latency: 100,
+    latency: 0,
     interpolationTime: 64,
     maxGameUpdatesBuffer: 8,
     maxGameStatusesBuffer: 10,
-    pingLoopTime: 1000
+    pingLoopTime: 1000,
+    inputClientDelay: 112
   };
 
   exports.key = {

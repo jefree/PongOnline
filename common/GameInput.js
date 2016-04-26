@@ -24,7 +24,7 @@
       }.bind(this));
 
       for (j in inputs) {
-        var input = inputs[i];
+        var input = inputs[j];
         entity.processInput(input);
         this.inputs.splice(this.inputs.indexOf(input), 1);
       };
