@@ -15,22 +15,28 @@
       return;
     }
 
-    for (var i=this.game.entities.length-1; i>=0; i--) {
-      var entity = this.game.entities[i];
+    var entities = this.getEntitiesWithInput();
 
+    for ( i in entities) {
+      var entity = entities[i];
       var inputs = this.inputs.filter(function(input){
-        return input.entityId == entity.id
-      });
+        return input.entityId == entity.id && this.shouldApplyInput(input, entity);
+      }.bind(this));
 
-      for (var j=0; j<inputs.length; j++) {
-        var input = inputs[j];
+      for (j in inputs) {
+        var input = inputs[i];
+        entity.processInput(input);
+        this.inputs.splice(this.inputs.indexOf(input), 1);
+      };
+    };
+  }
 
-        if (!this.game.isClient || input.time + 0.2 <= this.game.time) {
-          entity.processInput(input);
-          this.inputs.splice(this.inputs.indexOf(input), 1);
-        }
-      }
-    }
+  GameInput.prototype.getEntitiesWithInput = function() {
+    return this.game.players; //in the server we apply input for all the players
+  }
+
+  GameInput.prototype.shouldApplyInput = function(input, entity) {
+    return true; // the server always apply the inputs
   }
 
   GameInput.prototype.addInput = function(id, input, time) {

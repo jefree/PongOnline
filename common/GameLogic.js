@@ -8,6 +8,7 @@
     this.currentId = 1;
     this.time = 0;
     this.entities = [];
+    this.players = [];
   }
 
   // this must be the method to call for the game  loop
@@ -22,10 +23,16 @@
     throw "Not Implemented Error";
   }
 
-  GameLogic.prototype.addEntity = function(entity){
+  GameLogic.prototype.addEntity = function(entity, isPlayer){
     entity.id = this.currentId++;
     entity.game = this;
     this.entities.push(entity);
+    
+  }
+
+  GameLogic.prototype.addPlayer = function(player) {
+    this.addEntity(player);
+    this.players.push(player);
   }
 
   GameLogic.prototype.getEntityById = function(id) {

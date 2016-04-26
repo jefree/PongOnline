@@ -11,14 +11,14 @@
 
     // create the entity for the current player and this to the game
     this.player = new Player(Constants.player.normal.radius, Constants.player.type.vertical);
-    this.addEntity(this.player);
+    this.addPlayer(this.player);
 
     this.player.x = - this.player.radius*1/2;
     this.player.y = this.height / 2;
 
      // add a second player
     this.opponent = new Player(Constants.player.normal.radius, Constants.player.type.vertical);
-    this.addEntity(this.opponent);
+    this.addPlayer(this.opponent);
 
     this.opponent.x = this.width + this.opponent.radius*1/2;
     this.opponent.y = this.height / 2;

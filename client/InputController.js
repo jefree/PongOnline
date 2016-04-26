@@ -1,7 +1,7 @@
 (function(exports) {
   var InputController =  function(game) {
     this.game = game;
-    this.gameInput = new GameInput.class(this.game);
+    this.gameInput = new ClientGameInput.class(this.game);
 
     // store the inputs for each registered player
     this.entityInputMap = {};
