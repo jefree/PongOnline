@@ -3,6 +3,7 @@
   var Constants = require("./Constants");
   var Ball = require("./Ball").class;
   var Player = require("./Player").class;
+  var Util = require("./Util");
 
   var TwoPlayersGameLogic  = function(width, height) {
     GameLogic.call(this, width, height);
@@ -70,7 +71,7 @@
 
 
   TwoPlayersGameLogic.prototype.checkBallPlayerCollision = function(ball, player) {
-    var distanceBallP = this.distanceBetween(ball, player);
+    var distanceBallP = Util.distanceBetween(ball, player);
     var radiusSum = player.radius + ball.radius;
 
     if ( distanceBallP < radiusSum ) {
@@ -88,10 +89,6 @@
       ball.vx = ball.vx - 2 * dot * normal.x;
       ball.vy = ball.vy - 2 * dot * normal.y;
     }
-  }
-
-  TwoPlayersGameLogic.prototype.distanceBetween = function(p1, p2) {
-    return Math.sqrt( Math.pow(p2.x - p1.x, 2)+Math.pow(p1.y - p2.y, 2));
   }
 
   TwoPlayersGameLogic.prototype.getStatus = function() {

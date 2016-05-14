@@ -71,6 +71,10 @@
     return entity;
   }
 
+  exports.distanceBetween = function(p1, p2) {
+    return Math.sqrt( Math.pow(p2.x - p1.x, 2)+Math.pow(p1.y - p2.y, 2));
+  }
+
   exports.clone = clone;
   exports.lerp = lerp;
   exports.interval = interval;
