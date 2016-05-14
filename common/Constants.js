@@ -31,7 +31,7 @@
     },
     type: {
       horizontal: 0,
-      vertcal: 1
+      vertical: 1
     }
   };
 

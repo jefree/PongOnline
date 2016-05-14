@@ -26,6 +26,9 @@
     this.checkBallPlayerCollision(this.ball, this.players[0]);
     this.checkBallPlayerCollision(this.ball, this.players[1]);
 
+    this.checkPlayerBoundsCollision(this.players[0]);
+    this.checkPlayerBoundsCollision(this.players[1]);
+
     this.saveGameStatus();
   }
 

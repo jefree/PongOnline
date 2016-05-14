@@ -47,6 +47,9 @@
 
     this.checkBallPlayerCollision(this.ball, this.player);
     this.checkBallPlayerCollision(this.ball, this.opponent);
+
+    this.checkPlayerBoundsCollision(this.player);
+    this.checkPlayerBoundsCollision(this.opponent);
   }
 
   TwoPlayersGameLogic.prototype.checkBallBoundsCollision = function(){
@@ -88,6 +91,33 @@
 
       ball.vx = ball.vx - 2 * dot * normal.x;
       ball.vy = ball.vy - 2 * dot * normal.y;
+    }
+  }
+
+  TwoPlayersGameLogic.prototype.checkPlayerBoundsCollision = function(player) {
+    if(player.playerType == Constants.player.type.horizontal) {
+      this.checkHorizontalPlayerBoundsCollision(player);
+
+    } else {
+      this.checkVerticalPlayerBoundsCollision(player);
+    }
+  }
+
+  TwoPlayersGameLogic.prototype.checkHorizontalPlayerBoundsCollision = function(player) {
+    if(player.x - player.radius < 0) {
+      player.x = player.radius;
+    
+    } else if(player.x + player.radius > this.width) {
+      player.x = this.width - player.radius;
+    }
+  }
+
+  TwoPlayersGameLogic.prototype.checkVerticalPlayerBoundsCollision = function(player) {
+    if(player.y - player.radius < 0) {
+      player.y = player.radius;
+    
+    } else if(player.y + player.radius > this.height) {
+      player.y = this.height - player.radius;
     }
   }
 

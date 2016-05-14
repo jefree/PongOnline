@@ -10,7 +10,7 @@
     this.vx = 0;
     this.vy = 0;
     this.radius = radius;
-    this.playerType = playerType || Constants.player.type.horizantal;
+    this.playerType = playerType || Constants.player.type.horizontal;
   }
 
   Player.prototype.move = function(delta){
