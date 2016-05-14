@@ -11,14 +11,21 @@
     this.gameStatuses = [];
     this.gameServerUpdates = [];
     this.lastGameUpdateId = 0;
-    this.isClient = true;
   }
   ClientTwoPlayersGameLogic.prototype = Object.create(TwoPlayersGameLogic.prototype);
   ClientTwoPlayersGameLogic.prototype.constructor = ClientTwoPlayersGameLogic;
 
   ClientTwoPlayersGameLogic.prototype.update = function(delta) {
     this.reconciliation();
+
+    this.ball.update(delta);
     this.me.update(delta);
+
+    this.checkBallBoundsCollision();
+
+    this.checkBallPlayerCollision(this.ball, this.players[0]);
+    this.checkBallPlayerCollision(this.ball, this.players[1]);
+
     this.saveGameStatus();
   }
 
@@ -26,7 +33,7 @@
   ClientTwoPlayersGameLogic.prototype.reconciliation = function() {
     var lastGameUpdate = this.getLastGameUpdate();
 
-//    if (lastGameUpdate) {
+    if (lastGameUpdate) {
 //      this.cleanPendingInputsFrom(lastGameUpdate.lastInputId);
 //
 //      //check if it is neccesary apply pending inputs
@@ -47,7 +54,8 @@
 //          break;
 //        }
 //      }
-//    }
+      this.correctBall(lastGameUpdate);
+    }
 
     this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
   }
@@ -126,13 +134,14 @@
 
     var elapsedTime = (pastTime - prevState.time) / (nextState.time - prevState.time)
 
-    //interpolate the entitiy position
-    for ( index in this.entities ) {
-      var entity = this.entities[index];
+    //dont interpolate the player and the ball neither
+    var otherEntities = this.entities.filter(function(entity) {
+      return ! (entity.id == this.me.id || entity.id == this.ball.id);
+    }.bind(this));
 
-      if (entity.id == this.me.id) {
-        continue;
-      }
+    //interpolate the entitiy position
+    for ( index in otherEntities ) {
+      var entity = otherEntities[index];
 
       var prevEntity = this.getEntityInState(prevState, entity.id);
       var nextEntity = this.getEntityInState(nextState, entity.id);
@@ -142,6 +151,7 @@
     }
   }
 
+  
   ClientTwoPlayersGameLogic.prototype.correctEntities = function(gameUpdate, force) {
     for (var i in gameUpdate.entities) {
       var entity = gameUpdate.entities[i];
@@ -176,13 +186,20 @@
     var difX = Math.abs (localPositon.x - entity.x);
     var difY = Math.abs (localPositon.y - entity.y);
 
-    if (difX < 6 && difY < 6) {
+    if (!force && difX < 50 && difY < 50) {
       entity.x = localPositon.x;
       entity.y = localPositon.y
+      console.log("OK");
     }
     else {
+      console.log("FAILED");
     }
  }
+
+  ClientTwoPlayersGameLogic.prototype.correctBall = function(gameState) {
+    var serverBall = Util.getEntityByIdFromState(this.ball.id, gameState);
+    this.updateEntityFor(this.ball, serverBall, gameState.time, false);
+  }
 
   ClientTwoPlayersGameLogic.prototype.getEntityInState = function(state, id) {
     var entity = null;

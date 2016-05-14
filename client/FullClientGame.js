@@ -67,7 +67,6 @@
   }
 
   FullClientGame.prototype.onInput = function(input) {
-    console.log("aja ja ja");
     this.clientGameLogic.pendingInputs.push(input);
     this.network.emit('input', input);
   }
