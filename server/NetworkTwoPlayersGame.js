@@ -52,6 +52,7 @@ NetworkTwoPlayersGame.prototype.updatePlayersLastInput = function() {
 }
 
 NetworkTwoPlayersGame.prototype.updateLoop = function() {
+  console.log("server broadcast update", this.gameLogic.time)
   var gameStatus = this.gameLogic.getStatus();
   gameStatus.lastInputId = {};
 

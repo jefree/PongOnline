@@ -16,6 +16,7 @@
   ClientTwoPlayersGameLogic.prototype.constructor = ClientTwoPlayersGameLogic;
 
   ClientTwoPlayersGameLogic.prototype.update = function(delta) {
+    console.log("game logic update", this.time);
     this.reconciliation();
 
     this.ball.update(delta);
@@ -188,8 +189,10 @@
 
     var difX = Math.abs (localPositon.x - entity.x);
     var difY = Math.abs (localPositon.y - entity.y);
+    
+    console.log(difX, difY, timeGap);
 
-    if (!force && difX < 50 && difY < 50) {
+    if (!force && difX < Constants.game.maxBallDiff && difY < Constants.game.maxBallDiff) {
       entity.x = localPositon.x;
       entity.y = localPositon.y
       console.log("OK");

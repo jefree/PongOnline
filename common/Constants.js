@@ -5,12 +5,13 @@
 
     gameLoopTime: 16,
     updateLoopTime: 32,
-    latency: 100,
+    latency: 0,
     interpolationTime: 64,
-    maxGameUpdatesBuffer: 8,
+    maxGameUpdatesBuffer: 16,
     maxGameStatusesBuffer: 10,
     pingLoopTime: 1000,
-    inputClientDelay: 100
+    inputClientDelay: 100,
+    maxBallDiff: 50
   };
 
   exports.key = {

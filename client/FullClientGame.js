@@ -27,6 +27,7 @@
   }
 
   FullClientGame.prototype.update = function() {
+    console.log("global update");
     this.keyboardController.update();
     this.clientGameLogic._update();
   }
@@ -41,6 +42,7 @@
   }
 
   FullClientGame.prototype.onConnected = function(data) {
+    console.log("here it's where all began");
     this.clientGameLogic.time = data.time;
     this.clientGameLogic.me = this.clientGameLogic.getEntityById(data.me);
     this.clientGameLogic.correctEntities(data.gameStatus, true);
@@ -53,12 +55,13 @@
     gameLoopInterval.run();
 
     var pingLoopInterval = new Util.interval(this.requestPing.bind(this), Constants.game.pingLoopTime);
-    pingLoopInterval.run();
+    //pingLoopInterval.run();
 
     requestAnimationFrame(this.render.bind(this));
   }
 
   FullClientGame.prototype.onUpdate = function(update) {
+    console.log("new update", update.time);
     this.clientGameLogic.addGameUpdate(update);
   }
 

@@ -34,16 +34,23 @@
         this.baseline = new Date().getTime();
       }
       else {
+        console.log("here is the action");
         fn();
       }
 
-      var end = new Date().getTime()
+      var end = new Date().getTime();
       this.baseline += duration
+      
+      console.log("time info", this.baseline, end);
+      console.log("duration", duration);
    
-      var nextTick = duration - (end - this.baseline)
-      if(nextTick<0){
+      var nextTick = duration - (end - this.baseline);
+      if(nextTick < 0){
         nextTick = 0
+      } else if (nextTick > duration) {
+        nextTick = duration;
       }
+      console.log("nextTick", nextTick);
       (function(i){
           i.timer = setTimeout(function(){
           i.run(end)
