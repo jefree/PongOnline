@@ -17,6 +17,7 @@
 
   ClientTwoPlayersGameLogic.prototype.update = function(delta) {
     console.log("game logic update", this.time);
+    console.log("real time", new Date().getTime());
     this.reconciliation();
 
     this.ball.update(delta);
@@ -38,6 +39,9 @@
     var lastGameUpdate = this.getLastGameUpdate();
 
     if (lastGameUpdate) {
+      if (this.time == 0) {
+        this.time = lastGameUpdate.time;
+      }
 //      this.cleanPendingInputsFrom(lastGameUpdate.lastInputId);
 //
 //      //check if it is neccesary apply pending inputs
@@ -93,6 +97,7 @@
     if (gameUpdate.id > this.lastGameUpdateId) {
       lastGameUpdate = gameUpdate;
       this.lastGameUpdateId = lastGameUpdate.id;
+      console.log("processed update", lastGameUpdate.id, new Date().getTime());
     }
 
     return lastGameUpdate;

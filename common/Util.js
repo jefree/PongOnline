@@ -26,36 +26,37 @@
     return (1-time)*begin + time*end;
   }
 
-  function interval(fn, duration){
+  function interval(fn, duration, name){
+    var self = this;
     this.baseline = undefined
+    
+    function programExec(time) {
+      self.timer = setTimeout(function(){
+          self.run()
+      }, time)
+    }
     
     this.run = function(){
       if(this.baseline === undefined){
         this.baseline = new Date().getTime();
+        programExec(duration);
+        return;
       }
-      else {
-        console.log("here is the action");
-        fn();
-      }
+      
+      fn();
 
       var end = new Date().getTime();
       this.baseline += duration
-      
       console.log("time info", this.baseline, end);
-      console.log("duration", duration);
-   
+      
       var nextTick = duration - (end - this.baseline);
+      console.log("nextTick", name, nextTick);
       if(nextTick < 0){
         nextTick = 0
       } else if (nextTick > duration) {
         nextTick = duration;
       }
-      console.log("nextTick", nextTick);
-      (function(i){
-          i.timer = setTimeout(function(){
-          i.run(end)
-        }, nextTick)
-      })(this)
+      programExec(nextTick);
     }
 
     this.stop = function(){

@@ -37,8 +37,8 @@ AbstractServerGame.prototype.callPlayerEvent = function(player, name) {
 
 AbstractServerGame.prototype.beginGame = function(gameLoopTime, updateLoopTime) {
   //set intervals for the game logic and input as well as for game update.
-  this.gameUpdateLoopId = new Util.interval(this.gameLoop.bind(this), gameLoopTime);
-  this.gameBroadcastUpdateLoopId = new Util.interval(this.updateLoop.bind(this), updateLoopTime);
+  this.gameUpdateLoopId = new Util.interval(this.gameLoop.bind(this), gameLoopTime, "game logic");
+  this.gameBroadcastUpdateLoopId = new Util.interval(this.updateLoop.bind(this), updateLoopTime, "server update");
 
   this.gameUpdateLoopId.run();
   this.gameBroadcastUpdateLoopId.run();

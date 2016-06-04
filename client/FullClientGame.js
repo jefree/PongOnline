@@ -42,8 +42,7 @@
   }
 
   FullClientGame.prototype.onConnected = function(data) {
-    console.log("here it's where all began");
-    this.clientGameLogic.time = data.time;
+    console.log("here it's where all began", new Date().getTime());
     this.clientGameLogic.me = this.clientGameLogic.getEntityById(data.me);
     this.clientGameLogic.correctEntities(data.gameStatus, true);
 
@@ -61,7 +60,7 @@
   }
 
   FullClientGame.prototype.onUpdate = function(update) {
-    console.log("new update", update.time);
+    console.log("new update", update.time, new Date().getTime());
     this.clientGameLogic.addGameUpdate(update);
   }
 
