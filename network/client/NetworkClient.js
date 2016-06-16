@@ -6,19 +6,11 @@
   }
 
   AbstractClientNetwork.prototype.on = function(name, callback) {
-    var self = this;
-
-    this.socket.on(name, function(data){
-      callback.call(null, data)
-    });
+    this.socket.on(name, callback);
   }
 
   AbstractClientNetwork.prototype.emit = function(name, data) {
-    var self = this;
-
-    this.delay(function() {
-      self.socket.emit(name, data);
-    });
+    this.socket.emit(name, data);
   }
 
   AbstractClientNetwork.prototype.delay = function(callback) {

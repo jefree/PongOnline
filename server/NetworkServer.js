@@ -7,6 +7,7 @@ var NetworkServer = function(io) {
 
   this.latency = Constants.game.latency;
 }
+
 NetworkServer.prototype = Object.create(AbstractNetworkServer.prototype);
 NetworkServer.prototype.constructor = NetworkServer;
 
