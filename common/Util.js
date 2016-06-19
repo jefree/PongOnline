@@ -31,19 +31,20 @@
     
     this.run = function(){
       if(this.baseline === undefined){
-        this.baseline = new Date().getTime();
-      }
-      else {
-        fn();
+        this.baseline = Date.now();
       }
 
-      var end = new Date().getTime()
-      this.baseline += duration
-   
-      var nextTick = duration - (end - this.baseline)
-      if(nextTick<0){
+      fn();
+
+      var end = Date.now();
+      var nextTick = duration - (end - this.baseline);
+
+      if(nextTick < 0){
         nextTick = 0
       }
+
+      this.baseline += duration;
+
       (function(i){
           i.timer = setTimeout(function(){
           i.run(end)
