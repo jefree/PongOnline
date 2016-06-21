@@ -13,11 +13,6 @@
     this.gameRenderer.addRenderer("Ball", BallRenderer);
 
     this.keyboardController = new KeyboardController.class(this.clientGameLogic);
-
-//    this.keyboardController.addEntityInput(this.clientGameLogic.player.id, Constants.key.W, "backward");
-//    this.keyboardController.addEntityInput(this.clientGameLogic.player.id, Constants.key.S, "forward");
-
-//    this.keyboardController.gameInput.applyInputs = false;
     this.keyboardController.gameInput.addListener('game', this.onInput.bind(this));
 
     this.network.latency = Constants.game.latency;

@@ -20,7 +20,6 @@
 
   Player.prototype.update = function(delta) {
     this.move(delta);
-    this.vx = this.vy = 0;
   }
 
   Player.prototype.getStatus = function() {
@@ -51,19 +50,25 @@
 
   Player.prototype.processInputAsHorizontal = function(input) {
     if (input.forward) {
-      this.vx += Constants.player.normal.speed;
+      this.vx = Constants.player.normal.speed;
     }
     else if (input.backward) {
-      this.vx += -Constants.player.normal.speed;
+      this.vx = -Constants.player.normal.speed;
+    }
+    else {
+      this.vx = 0;
     }
   }
 
   Player.prototype.processInputAsVertical = function(input) {
     if (input.forward) {
-      this.vy += Constants.player.normal.speed;
+      this.vy = Constants.player.normal.speed;
     }
     else if (input.backward) {
-      this.vy += -Constants.player.normal.speed;
+      this.vy = -Constants.player.normal.speed;
+    }
+    else {
+      this.vy = 0;
     }
   }
 

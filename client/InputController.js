@@ -47,9 +47,7 @@
         }
       }
 
-      if ( Object.keys(inputSet).length > 0) {
-        this.gameInput.addInput(entityId, inputSet, this.game.time);
-      }
+      this.gameInput.addInput(entityId, inputSet, this.game.time);
     }
 
     this.gameInput.update();
