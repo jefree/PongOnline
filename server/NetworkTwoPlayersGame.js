@@ -22,11 +22,21 @@ NetworkTwoPlayersGame.prototype.isAvailable = function() {
 }
 
 NetworkTwoPlayersGame.prototype.onNewPlayer = function(player) {
-  var entity = this.players.length == 1 ? this.gameLogic.player : this.gameLogic.opponent;
-  player.entity = entity;
+  var playerEntity, opponentEntity;
+
+  if (this.players.length == 1) {
+    playerEntity = this.gameLogic.player;
+    opponentEntity = this.gameLogic.opponent;
+  }
+  else {
+    playerEntity = this.gameLogic.opponent;
+    opponentEntity = this.gameLogic.player;
+  }
+
+  player.entity = playerEntity;
   player.lastPendingInputId = 0;
 
-  return { me : player.entity.id, time: this.gameLogic.time, gameStatus: this.gameLogic.getStatus()};
+  return { me : playerEntity.id, opponent: opponentEntity.id, time: this.gameLogic.time, gameStatus: this.gameLogic.getStatus()};
 }
 
 NetworkTwoPlayersGame.prototype.onPlayerInput = function(player, input) {

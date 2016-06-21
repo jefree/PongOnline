@@ -7,6 +7,7 @@
     TwoPlayersGameLogic.call(this, width, height);
 
     this.me = null; // the entity for this player
+    this.opponent = null;
     this.pendingInputs = [];
     this.gameStatuses = [];
     this.gameServerUpdates = [];
