@@ -21,6 +21,7 @@
 
     this.ball.update(delta);
     this.me.update(delta);
+    this.opponent.update(delta);
 
     this.checkBallBoundsCollision();
 
@@ -59,9 +60,10 @@
 //        }
 //      }
       this.correctBall(lastGameUpdate);
+      this.correctOpponent(lastGameUpdate);
     }
 
-    this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
+//    this.interpolateEntitiesAt(this.time - Constants.game.interpolationTime/1000);
   }
 
   ClientTwoPlayersGameLogic.prototype.cleanPendingInputsFrom = function(lastInputId) {
@@ -147,8 +149,8 @@
     for ( index in otherEntities ) {
       var entity = otherEntities[index];
 
-      var prevEntity = this.getEntityInState(prevState, entity.id);
-      var nextEntity = this.getEntityInState(nextState, entity.id);
+      var prevEntity = Util.getEntityByIdFromState(prevState, entity.id);
+      var nextEntity = Util.getEntityByIdFromState(nextState, entity.id);
 
       entity.x = Util.lerp(prevEntity.x, nextEntity.x, elapsedTime);
       entity.y = Util.lerp(prevEntity.y, nextEntity.y, elapsedTime);
@@ -193,10 +195,6 @@
     if (!force && difX < 50 && difY < 50) {
       entity.x = localPositon.x;
       entity.y = localPositon.y
-      console.log("OK");
-    }
-    else {
-      console.log("FAILED");
     }
  }
 
@@ -205,18 +203,10 @@
     this.updateEntityFor(this.ball, serverBall, gameState.time, false);
   }
 
-  ClientTwoPlayersGameLogic.prototype.getEntityInState = function(state, id) {
-    var entity = null;
-    var i = 0;
-
-    while (entity == null && i < state.entities.length) {
-      if (state.entities[i].id == id) {
-        entity = state.entities[i];
-      }
-      i++;
-    }
-
-    return entity;
+  ClientTwoPlayersGameLogic.prototype.correctOpponent = function(gameState) {
+    var serverOpponent = Util.getEntityByIdFromState(this.opponent.id, gameState);
+    console.log(serverOpponent);
+    this.updateEntityFor(this.opponent, serverOpponent, gameState.time, false);
   }
 
   ClientTwoPlayersGameLogic.prototype.saveGameStatus = function() {
